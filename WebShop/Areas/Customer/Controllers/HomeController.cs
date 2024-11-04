@@ -1,21 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebShop.Models;
+using WebShop.Repository.IRepository;
 
-namespace WebShop.Controllers
+namespace WebShop.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            IQueryable<Product> products;
+            products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category");
+            return View(products);
         }
 
         public IActionResult Privacy()

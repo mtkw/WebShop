@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Product>
+<div class="container">
+    <div class="row">
+        <div class="col-12">Głowna Część strony<br />
+            <div class="row">
+                @foreach (var product in Model)
+                {
+                    <div class="col-3">@product.Name </div>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">Kafelki z kategoriami</div>
+        </div>
+    </div>
+</div>

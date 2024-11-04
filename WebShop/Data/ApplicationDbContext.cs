@@ -6,6 +6,11 @@ namespace WebShop.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        protected readonly IConfiguration Configuration;
+        public ApplicationDbContext(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public DbSet<ProductCategory> Categories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
