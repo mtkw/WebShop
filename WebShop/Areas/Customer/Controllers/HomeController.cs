@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebShop.Models;
+using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
 
 namespace WebShop.Areas.Customer.Controllers
@@ -21,7 +22,18 @@ namespace WebShop.Areas.Customer.Controllers
         {
             IQueryable<Product> products;
             products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category");
-            return View(products);
+            IQueryable<ProductCategory> categories;
+            categories = _unitOfWork.ProductCategory.GetAll();
+            IQueryable<Supplier> suppliers;
+            suppliers = _unitOfWork.Supplier.GetAll();
+
+            var customVM = new ProductSupplierCategoryVM
+            {
+                Categories = categories,
+                Products = products,
+                Suppliers = suppliers
+            };
+            return View(customVM);
         }
 
         public IActionResult Privacy()

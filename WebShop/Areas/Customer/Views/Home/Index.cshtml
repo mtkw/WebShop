@@ -1,16 +1,52 @@
-﻿@model IEnumerable<Product>
+﻿@using WebShop.Models.Views
+@model ProductSupplierCategoryVM
 <div class="container">
     <div class="row">
-        <div class="col-12">Głowna Część strony<br />
-            <div class="row">
-                @foreach (var product in Model)
-                {
-                    <div class="col-3">@product.Name </div>
-                }
+        <div class="col-12">
+            <div class="row" style="min-height: 400px">
+                <div id="carouselExample" class="carousel slide col-6 mx-auto">
+                    <div class="carousel-inner">
+                        @foreach(var product in Model.Products)
+                        {
+                            @if(product.Id == 1)
+                            {
+                                <div class="carousel-item active">
+                                        <img src="img/@(product.Name).jpg" class="d-block w-50" style="max-height: 400px" alt="@product.Name" />
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5 class="text-dark">@product.Name</h5>
+                                            <p class="text-dark">@product.Description</p>
+                                        </div>
+                                    </div>
+                            }
+                            else{
+                                <div class="carousel-item">
+                                    <img src="img/@(product.Name).jpg" class="d-block w-50 h-25" style="max-height: 400px" alt="@product.Name" />
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5 class="text-dark">@product.Name</h5>
+                                        <p class="text-dark">@product.Description</p>
+                                    </div>
+
+                                </div>
+                            }
+                        }
+                        </div>
+                    <button class="carousel-control-prev bg-dark bg-opacity-25" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                        </button>
+                    <button class="carousel-control-next bg-dark bg-opacity-25" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                        </button>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">Kafelki z kategoriami</div>
+        <div class="row justify-content-center">
+            <div class="col-12"><h3 class="text-dark">Most Popular Categories</h3></div>
+            @foreach(var category in Model.Categories)
+            {
+                <a class="col-2 m-1 p-1" asp-controller="Products" asp-action="Index" asp-route-categoryId="@category.Id"><button class="btn btn-dark">@category.Name</button></a>
+            }
         </div>
     </div>
 </div>

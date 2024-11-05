@@ -28,7 +28,13 @@ namespace WebShop.Data
                 new ProductCategory { Id = 1, Name = "Tablets" },
                 new ProductCategory { Id = 2, Name = "Smartphone" },
                 new ProductCategory { Id = 3, Name = "Laptops" },
-                new ProductCategory { Id = 4, Name = "Others" }
+                new ProductCategory { Id = 4, Name = "Others" },
+                new ProductCategory { Id = 5, Name = "Headphones"},
+                new ProductCategory { Id = 6, Name = "Pointing devices"},
+                new ProductCategory { Id = 7, Name = "Printers and Scanner"},
+                new ProductCategory { Id = 8, Name = "Routers and Modems"},
+                new ProductCategory { Id = 9, Name = "Desktop Computers" },
+                new ProductCategory { Id = 10, Name = "Consoles" }
     );
 
             modelBuilder.Entity<Supplier>().HasData(
