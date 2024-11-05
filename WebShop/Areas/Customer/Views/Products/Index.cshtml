@@ -1,15 +1,15 @@
 ﻿@using WebShop.Models.Views
-@model ProductSupplierCategoryVM
+@model ProductsByCategoryVM
 
 <div class="container">
     <div class="row">
         <div class="col-md-3">
             <h3>Categories</h3>
             <ul class="list-group">
-                @foreach (var category in Model.Categories)
+                @foreach (var category in Model.ProductCategories)
                 {
-                    <li class="list-group-item">
-                        <a href="@Url.Action("Index", new { categoryId = category.Id })" class="@(category.Id == 1 ? "text-light" : "text-dark")">
+                    <li class="list-group-item @(category.Id == Model.SelectedCategory ? "active" : "")">
+                        <a href="@Url.Action("Index", new { categoryId = category.Id })" class="@(category.Id == Model.SelectedCategory ? "text-light" : "text-dark")">
                             @category.Name
                         </a>
                     </li>

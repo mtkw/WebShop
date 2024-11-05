@@ -22,10 +22,12 @@ namespace WebShop.Areas.Customer.Controllers
             IQueryable<Product> products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category").Where(x=>x.ProductCategoryId==categoryId);
             IQueryable<ProductCategory> categories = _unitOfWork.ProductCategory.GetAll();
 
-            var customVM = new ProductSupplierCategoryVM()
+            var customVM = new ProductsByCategoryVM()
             {
                 Products = products,
-                Categories = categories
+                ProductCategories = categories,
+                SelectedCategory = categoryId
+
             };
             return View(customVM);
         }
