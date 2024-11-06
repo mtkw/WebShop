@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using WebShop.Models.Views
+@{
+
+    var layoutModel = ViewBag.LayoutVM as LayoutVM; // Cast ViewBag to your model type
+
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,6 +31,25 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                                <form class="row">
+                                    <div class="col-4 m-0 p-0">
+                                        <input type="text" class="form-control" id="search" aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="col-4 m-0 p-0">
+                                        <select class="form-select" aria-label="Categories">
+                                            <option selected value="0">All Categories</option>
+                                            @foreach (var category in layoutModel.ProductCategories)
+                                            {
+                                                <option value="@category.Id">@category.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                    <button type="submit" class="btn btn-primary" asp-controller="Products" asp-action="Search">Search</button>
+                                    </div>
+                                </form>
                         </li>
                     </ul>
                 </div>

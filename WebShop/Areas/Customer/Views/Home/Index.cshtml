@@ -1,7 +1,7 @@
 ﻿@using WebShop.Models.Views
 @model ProductSupplierCategoryVM
 <div class="container">
-    <div class="row">
+    <div class="row h-75">
         <div class="col-12">
             <div class="row" style="min-height: 400px">
                 <div id="carouselExample" class="carousel slide col-6 mx-auto">
@@ -41,12 +41,12 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-12"><h3 class="text-dark">Most Popular Categories</h3></div>
-            @foreach(var category in Model.Categories)
-            {
-                <a class="col-2 m-1 p-1" asp-controller="Products" asp-action="Index" asp-route-categoryId="@category.Id"><button class="btn btn-dark">@category.Name</button></a>
-            }
-        </div>
+    </div>
+    <div class="row h-25 justify-content-center">
+        <div class="col-12"><h3 class="text-dark">Most Popular Categories</h3></div>
+        @foreach (var category in Model.Categories)
+        {
+            <a class="col-2 m-1 p-1" asp-controller="Products" asp-action="Index" asp-route-categoryId="@category.Id"><button class="btn btn-dark">@category.Name</button></a>
+        }
     </div>
 </div>
