@@ -12,6 +12,7 @@ namespace WebShop.Areas.Customer.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
+
         public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
@@ -33,10 +34,10 @@ namespace WebShop.Areas.Customer.Controllers
                 Products = products,
                 Suppliers = suppliers
             };
-
+/*
             //Przygotowanie i przekazanie danych jako ViewBag do _layout.cshtml
             var layoutVM = new LayoutVM { ProductCategories = _unitOfWork.ProductCategory.GetAll()};
-            ViewBag.LayoutVM = layoutVM;
+            ViewBag.LayoutVM = layoutVM;*/
 
             return View(customVM);
         }

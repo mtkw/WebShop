@@ -1,4 +1,5 @@
-﻿using WebShop.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WebShop.Data;
 using WebShop.Models;
 using WebShop.Repository.IRepository;
 
@@ -12,9 +13,16 @@ namespace WebShop.Repository
             _context = context;
         }
 
+        public async Task<List<ProductCategory>> GetAllAsync()
+        {
+            return await _context.Categories.ToListAsync();
+        }
+
         public void Update(ProductCategory productCategory)
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }
