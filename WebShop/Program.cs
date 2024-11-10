@@ -4,6 +4,8 @@ using WebShop.Repository;
 using WebShop.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using WebShop.Middleware;
+using WebShop.Utility;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace WebShop
 {
@@ -19,10 +21,14 @@ namespace WebShop
             //Add DatabaseConfiguration
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnecion")));
 
-            builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+            //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>(); // Domyœlna konfiguracja tylko do rejesracji i logowania u¿ytkowników bez podzia³u na role
+
+            // Konfiguracja rozszerzona o mo¿liwoœæ wporwadzenia ról dla poszczególnych u¿ytkowników np: Admin i User
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders(); 
+
             builder.Services.AddRazorPages(); // Konfiguracja Razor pages bez tego ¿adna strona stworzona dla Identity nie bêdzie dzia³aæ 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
             var app = builder.Build();
 
