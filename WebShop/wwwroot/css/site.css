@@ -20,3 +20,69 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Default height for large screens */
+.carousel-image {
+    height: 250px;
+    
+}
+
+/* Adjust height for medium screens */
+@media (max-width: 768px) {
+    .carousel-image {
+        height: 300px;
+    }
+}
+
+/* Adjust height for small screens */
+@media (max-width: 576px) {
+    .carousel-image {
+        height: 200px;
+    }
+}
+
+.carousel-caption {
+    font-size: 1.2rem; /* Default font size */
+}
+
+@media (max-width: 768px) {
+    .carousel-caption {
+        font-size: 1rem; /* Smaller font size on mobile */
+    }
+}
+
+.carousel-item img {
+    margin: 0 auto; /* this will align the image to center. */
+    width: auto; /* for those images which don't have a width specified, but has a max-height will be auto adjusted */
+}
+
+/* Style for the hover bar under the nav links */
+.nav-item {
+    position: relative; /* Position it relative for absolute positioning of the hover bar */
+}
+
+.hover-bar {
+    position: absolute;
+    width: 0;
+    height: 3px; /* Thin bar */
+    background-color: transparent;
+    bottom: 0; /* Place it at the bottom of the nav item */
+    left: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* On hover, make the bar visible and change its color */
+.nav-item:hover .hover-bar {
+    width: 100%; /* Bar expands to full width */
+    background-color: rgba(0, 123, 255, 0.7); /* Bright color on hover */
+}
+
+
+.nav-item a:hover {
+    color: #fff; /* Change text color when hovering */
+}
+
+/* Remove underline from links inside list-group items */
+.list-group-item a {
+    text-decoration: none; 
+}

@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using WebShop.Data;
+using WebShop.Repository;
+using WebShop.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
+using WebShop.Middleware;
+using WebShop.Utility;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace WebShop
 {
@@ -16,6 +21,25 @@ namespace WebShop
             //Add DatabaseConfiguration
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnecion")));
 
+
+            //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>(); // Domyœlna konfiguracja tylko do rejesracji i logowania u¿ytkowników bez podzia³u na role
+
+            // Konfiguracja rozszerzona o mo¿liwoœæ wporwadzenia ról dla poszczególnych u¿ytkowników np: Admin i User
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            //Konfiguracja œcie¿ek do takich podstron jak Login/Logout i AccessDenied. Bez tego nie przejdzie na te podstrony. Domyœlna œcie¿ka jest b³êdna
+            //Bardzo wa¿ne ta konfiguracja musi byæ umieszczona dopiero po linijce konfiguruj¹cej Idenity w tym wypadku po linijce 28
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+
+            builder.Services.AddRazorPages(); // Konfiguracja Razor pages bez tego ¿adna strona stworzona dla Identity nie bêdzie dzia³aæ 
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -28,14 +52,14 @@ namespace WebShop
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseMiddleware<ProductCategoryMiddleware>(); // konfigfuracja Klasy Middleware
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            app.MapRazorPages(); // Druga czêœæ konfiguracji Razor Pages
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

@@ -1,14 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebShop.Models;
 
 
 namespace WebShop.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
+        protected readonly IConfiguration Configuration;
+        public ApplicationDbContext(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public DbSet<ProductCategory> Categories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ApplicationUser> applicationUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,7 +31,13 @@ namespace WebShop.Data
                 new ProductCategory { Id = 1, Name = "Tablets" },
                 new ProductCategory { Id = 2, Name = "Smartphone" },
                 new ProductCategory { Id = 3, Name = "Laptops" },
-                new ProductCategory { Id = 4, Name = "Others" }
+                new ProductCategory { Id = 4, Name = "Others" },
+                new ProductCategory { Id = 5, Name = "Headphones"},
+                new ProductCategory { Id = 6, Name = "Pointing devices"},
+                new ProductCategory { Id = 7, Name = "Printers and Scanner"},
+                new ProductCategory { Id = 8, Name = "Routers and Modems"},
+                new ProductCategory { Id = 9, Name = "Desktop Computers" },
+                new ProductCategory { Id = 10, Name = "Consoles" }
     );
 
             modelBuilder.Entity<Supplier>().HasData(
