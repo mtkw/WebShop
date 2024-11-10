@@ -21,10 +21,20 @@ namespace WebShop
             //Add DatabaseConfiguration
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnecion")));
 
+
             //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>(); // Domyœlna konfiguracja tylko do rejesracji i logowania u¿ytkowników bez podzia³u na role
 
             // Konfiguracja rozszerzona o mo¿liwoœæ wporwadzenia ról dla poszczególnych u¿ytkowników np: Admin i User
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders(); 
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            //Konfiguracja œcie¿ek do takich podstron jak Login/Logout i AccessDenied. Bez tego nie przejdzie na te podstrony. Domyœlna œcie¿ka jest b³êdna
+            //Bardzo wa¿ne ta konfiguracja musi byæ umieszczona dopiero po linijce konfiguruj¹cej Idenity w tym wypadku po linijce 28
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
 
             builder.Services.AddRazorPages(); // Konfiguracja Razor pages bez tego ¿adna strona stworzona dla Identity nie bêdzie dzia³aæ 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
