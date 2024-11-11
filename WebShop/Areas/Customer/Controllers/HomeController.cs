@@ -34,10 +34,6 @@ namespace WebShop.Areas.Customer.Controllers
                 Products = products,
                 Suppliers = suppliers
             };
-/*
-            //Przygotowanie i przekazanie danych jako ViewBag do _layout.cshtml
-            var layoutVM = new LayoutVM { ProductCategories = _unitOfWork.ProductCategory.GetAll()};
-            ViewBag.LayoutVM = layoutVM;*/
 
             return View(customVM);
         }
