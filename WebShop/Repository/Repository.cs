@@ -40,6 +40,26 @@ namespace WebShop.Repository
             return query;
         }
 
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includProperties = null)
+        {
+
+            IQueryable<T> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (!string.IsNullOrEmpty(includProperties))
+            {
+                foreach (var includeProp in includProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return query.FirstOrDefault();
+        }
+
         public void Remove(T entity)
         {
             _dbSet?.Remove(entity);

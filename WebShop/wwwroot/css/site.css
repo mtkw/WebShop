@@ -58,15 +58,15 @@ body {
 
 /* Style for the hover bar under the nav links */
 .nav-item {
-    position: relative; /* Position it relative for absolute positioning of the hover bar */
+    position: relative; 
 }
 
 .hover-bar {
     position: absolute;
     width: 0;
-    height: 3px; /* Thin bar */
+    height: 3px; 
     background-color: transparent;
-    bottom: 0; /* Place it at the bottom of the nav item */
+    bottom: 0; 
     left: 0;
     transition: width 0.3s ease, background-color 0.3s ease;
 }
@@ -85,4 +85,71 @@ body {
 /* Remove underline from links inside list-group items */
 .list-group-item a {
     text-decoration: none; 
+}
+
+.card-img-top {
+    display: block;
+    margin-left: auto; 
+    margin-right: auto; 
+    width: auto; 
+    height: 300px; 
+    object-fit: cover; 
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* The card with an animated border effect */
+.box {
+    width: 300px;
+    margin: 0 auto;
+    padding: 2px;
+    background-color: #eaab00; /* Gold background color */
+    border-radius: 10px; /* Optional rounded corners */
+    position: relative;
+    overflow: hidden; /* Ensures that the border stays inside the card */
+}
+
+/* Inner content of the card */
+.content {
+    background: white;
+    padding: 2em;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1; /* Keeps the content on top of the animated border */
+}
+
+/* Animated border effect */
+.box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    border-radius: 10px; /* Same border-radius as the card */
+    background-image: linear-gradient(white, white), linear-gradient(white, white);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    animation: drawBorderFromCenter 4s forwards;
+}
+
+/* Animation for drawing the border from the center */
+@keyframes drawBorderFromCenter {
+    0% {
+        background-size: 0 2px, 0 100%;
+    }
+
+    20% {
+        background-size: 100% 2px, 100% 100%;
+    }
+
+    66% {
+        background-size: 100% 2px, 100% 98%;
+    }
+
+    99% {
+        background-size: 100% 2px, 100% 98%;
+    }
 }
