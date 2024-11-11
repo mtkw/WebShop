@@ -24,7 +24,7 @@ namespace WebShop.Areas.Admin.Controllers
             return View(categories);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id) 
         {
             if (id == 0) 
@@ -36,7 +36,7 @@ namespace WebShop.Areas.Admin.Controllers
             _unitOfWork.ProductCategory.Remove(categoryToDelete);
             _unitOfWork.Save();
 
-            return RedirectToAction("Index");
+            return Json(new {data = "Delete Successfuly"});
         }
 
         [HttpGet]
