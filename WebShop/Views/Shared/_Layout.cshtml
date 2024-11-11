@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebShop.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"/>
+
 </head>
 <body>
     <header>
@@ -41,8 +43,8 @@
                                             Admin Panel
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item" href="#">Products</a></li>
-                                            <li><a class="dropdown-item" href="#">Products Categories</a></li>
+                                            <li><a class="dropdown-item">Products</a></li>
+                                            <li><a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Products Categories</a></li>
                                             <li><a class="dropdown-item" href="#">Users</a></li>
                                             <li><a class="dropdown-item" href="#">Orders</a></li>
                                         </ul>
@@ -90,6 +92,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
