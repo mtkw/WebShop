@@ -9,9 +9,8 @@ namespace WebShop.Repository.IRepository
         void Remove(T entity);
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includProperties = null);
-        //{
-            //return GetAll(filter, includProperties).FirstOrDefault();
-        //}
+
+       
 
     }
 }

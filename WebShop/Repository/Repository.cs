@@ -21,9 +21,8 @@ namespace WebShop.Repository
             _dbSet.Add(entity);
         }
 
-        public IQueryable<T> GetAll(Expression<Func<T, bool>>? filter, string? includProperties = null)
+        private static IQueryable<T> ApplyFilterAndIncludes(IQueryable<T> query, Expression<Func<T, bool>>? filter, string? includProperties)
         {
-            IQueryable<T> query = _dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
@@ -40,25 +39,18 @@ namespace WebShop.Repository
             return query;
         }
 
+        public IQueryable<T> GetAll(Expression<Func<T, bool>>? filter, string? includProperties = null)
+        {
+            var query = ApplyFilterAndIncludes(_dbSet, filter, includProperties);
+            return query;
+        }
+
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includProperties = null)
         {
-
-            IQueryable<T> query = _dbSet;
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (!string.IsNullOrEmpty(includProperties))
-            {
-                foreach (var includeProp in includProperties
-                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProp);
-                }
-            }
+            var query = ApplyFilterAndIncludes(_dbSet, filter, includProperties);
             return query.FirstOrDefault();
         }
+
 
         public void Remove(T entity)
         {
