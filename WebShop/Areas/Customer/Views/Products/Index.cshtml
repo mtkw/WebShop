@@ -22,7 +22,9 @@
                 {
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
+                            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
                             <img class="card-img-top" src="~/img/@(product.Name).jpg" alt="@product.Name" style="height: 200px;">
+                            </a>
                             <div class="card-body">
                                 <h5 class="card-title">@product.Name</h5>
                                 <p class="card-text">@product.Description</p>
@@ -30,6 +32,13 @@
                                 <p class="card-text">
                                     <a href="@Url.Action("Index", new { supplierId = product.SupplierId, categoryId = product.ProductCategoryId})">
                                         Supplier: @product.Supplier.Name
+                                    </a>
+                                    
+                                </p>
+                                <p class="card-text">
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
+                                       class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
+                                        View Details
                                     </a>
                                 </p>
 @*                                 <a class="btn btn-primary" onclick="addToCart()" asp-controller="Home" asp-action="AddToCart" asp-route-productId="@product.Id">Add to Cart</a>

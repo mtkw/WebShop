@@ -31,5 +31,18 @@ namespace WebShop.Areas.Customer.Controllers
             };
             return View(customVM);
         }
+
+        public IActionResult Details(int id) 
+        {
+            var product = _unitOfWork.Product.GetFirstOrDefault(x => x.Id == id,includProperties: "Supplier,Category");
+
+            
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
     }
 }

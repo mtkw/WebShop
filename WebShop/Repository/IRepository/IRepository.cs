@@ -7,5 +7,11 @@ namespace WebShop.Repository.IRepository
         IQueryable<T> GetAll(Expression<Func<T, bool>>? filter=null, string? includProperties = null);
         void Add(T entity);
         void Remove(T entity);
+
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includProperties = null);
+        //{
+            //return GetAll(filter, includProperties).FirstOrDefault();
+        //}
+
     }
 }
