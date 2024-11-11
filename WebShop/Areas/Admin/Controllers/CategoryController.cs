@@ -24,19 +24,19 @@ namespace WebShop.Areas.Admin.Controllers
             return View(categories);
         }
 
-        [HttpDelete("{id}")]
+/*        [HttpDelete("/Admin/Category/{id}")]*/ //Popracować nad implementacją RESTAPI
         public IActionResult Delete(int id) 
         {
             if (id == 0) 
             { 
-                return NotFound();
+                return NotFound(new { message = "Product not found." });
             }
 
             var categoryToDelete = _unitOfWork.ProductCategory.GetAll().Where(x=>x.Id == id).First();
             _unitOfWork.ProductCategory.Remove(categoryToDelete);
             _unitOfWork.Save();
 
-            return Json(new {data = "Delete Successfuly"});
+            return Ok(new { message = "Category deleted successfully." });
         }
 
         [HttpGet]
