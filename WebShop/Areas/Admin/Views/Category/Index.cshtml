@@ -3,6 +3,13 @@
         <div class="col-12"><h1>Product Category List</h1></div>
     </div>
     <div class="row">
+        <div class="col-6 align-content-end">
+            <a asp-controller="Category" asp-action="Create" class="btn btn-outline-dark">
+                <i class="bi bi-plus-circle"></i> Create New Category
+            </a>
+        </div>
+    </div>
+    <div class="row">
         <table id="categoryTable" class="table table-dark">
             <thead class="tab-content">
                 <tr>

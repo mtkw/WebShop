@@ -65,5 +65,20 @@ namespace WebShop.Areas.Admin.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(ProductCategory category)
+        {
+            _unitOfWork.ProductCategory.Add(category);
+            _unitOfWork.Save();
+            TempData["success"] = "Category created successfully";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
