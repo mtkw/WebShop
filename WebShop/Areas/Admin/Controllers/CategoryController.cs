@@ -53,5 +53,17 @@ namespace WebShop.Areas.Admin.Controllers
             var categoryToUpdate = _unitOfWork.ProductCategory.GetAll().Where(x=> x.Id == id).First();
             return View(categoryToUpdate);
         }
+
+        [HttpPost]
+        public IActionResult Edit(ProductCategory category)
+        {
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.ProductCategory.Update(category);
+                _unitOfWork.Save();
+                TempData["success"] = "Category updated successfully";
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

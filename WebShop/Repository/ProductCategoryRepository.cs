@@ -20,7 +20,15 @@ namespace WebShop.Repository
 
         public void Update(ProductCategory productCategory)
         {
-            throw new NotImplementedException();
+            var existingEntity = _context.Categories.Local.FirstOrDefault(x => x.Id == productCategory.Id);
+            if (existingEntity == null)
+            {
+                _context.Categories.Attach(productCategory);
+            }
+            else
+            {
+                _context.Entry(existingEntity).CurrentValues.SetValues(productCategory);
+            }
         }
 
         
