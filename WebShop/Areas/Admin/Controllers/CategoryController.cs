@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Models;
 using WebShop.Repository.IRepository;
@@ -24,19 +25,19 @@ namespace WebShop.Areas.Admin.Controllers
             return View(categories);
         }
 
-/*        [HttpDelete("/Admin/Category/{id}")]*/ //Popracować nad implementacją RESTAPI
-        public IActionResult Delete(int id) 
+        //TestRestApi
+        [HttpDelete]
+        public IActionResult Delete(int id)
         {
-            if (id == 0) 
-            { 
-                return NotFound(new { message = "Product not found." });
+            var category = _unitOfWork.ProductCategory.GetAll().Where(x=>x.Id == id).FirstOrDefault();
+
+            if (category == null)
+            {
+                return NotFound();
             }
-
-            var categoryToDelete = _unitOfWork.ProductCategory.GetAll().Where(x=>x.Id == id).First();
-            _unitOfWork.ProductCategory.Remove(categoryToDelete);
+            _unitOfWork.ProductCategory.Remove(category);
             _unitOfWork.Save();
-
-            return Ok(new { message = "Category deleted successfully." });
+            return NoContent();
         }
 
         [HttpGet]

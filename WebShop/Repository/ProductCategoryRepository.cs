@@ -13,11 +13,6 @@ namespace WebShop.Repository
             _context = context;
         }
 
-        public async Task<List<ProductCategory>> GetAllAsync()
-        {
-            return await _context.Categories.ToListAsync();
-        }
-
         public void Update(ProductCategory productCategory)
         {
             throw new NotImplementedException();
