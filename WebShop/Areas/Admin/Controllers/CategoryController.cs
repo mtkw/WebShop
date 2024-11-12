@@ -33,11 +33,18 @@ namespace WebShop.Areas.Admin.Controllers
 
             if (category == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Error while deleteing" });
             }
             _unitOfWork.ProductCategory.Remove(category);
             _unitOfWork.Save();
-            return NoContent();
+            return Json(new { success = true, message = "Product Deleted" });
+        }
+
+        [HttpGet]
+        public IActionResult GetAll() 
+        {
+            List<ProductCategory> categories = _unitOfWork.ProductCategory.GetAll().ToList();
+            return Json(new {data = categories});
         }
 
         [HttpGet]
