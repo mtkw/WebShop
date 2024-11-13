@@ -17,9 +17,9 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
                         <div class="w-75 btn-group" role="group" >
-                            <a onClick=Delete('/admin/category/delete?id=${data}') class="btn btn-outline-danger mx-2">
-                                <i class="bi bi-trash-fill"></i> Delete
-                            </a>
+                            <a onClick=Delete('/admin/category/delete?id=${data}') class="btn btn-outline-danger mx-2" >
+                            <i class="bi bi-trash-fill"></i> Delete
+                            </a >
                             <a href="/admin/category/edit?id=${data}" class="btn btn-outline-success mx-2">
                                <i class="bi bi-pencil-square"></i> Edit
                             </a>
@@ -54,4 +54,35 @@ function Delete(url) {
         }
     })
 }
+
+document.getElementById('updateCategoryForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent the default form submission
+    const productId = document.getElementById('productCategoryId').value;
+    const productName = document.getElementById('categoryName').value;
+
+    const updatedProduct = {
+        id: productId,
+        name: productName
+    };
+    try {
+        const response = await fetch(`/admin/category/edit?id=${productId}"`, {
+            method: 'PATCH', // or 'PUT' for complete updates
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedProduct),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log('Product updated successfully:', result);
+        window.location.href = "https://localhost:7194/admin/category/";
+    } catch (error) {
+        console.error('Error updating product:', error);
+
+    }
+});
 

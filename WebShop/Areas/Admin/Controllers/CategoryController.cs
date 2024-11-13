@@ -37,7 +37,7 @@ namespace WebShop.Areas.Admin.Controllers
             }
             _unitOfWork.ProductCategory.Remove(category);
             _unitOfWork.Save();
-            return Json(new { success = true, message = "Product Deleted" });
+            return Json(new { success = true, message = "Product Category Deleted" });
         }
 
         [HttpGet]
@@ -54,16 +54,13 @@ namespace WebShop.Areas.Admin.Controllers
             return View(categoryToUpdate);
         }
 
-        [HttpPost]
-        public IActionResult Edit(ProductCategory category)
+        [HttpPatch]
+        public IActionResult Edit(int id, [FromBody] ProductCategory category)
         {
-            if (ModelState.IsValid)
-            {
                 _unitOfWork.ProductCategory.Update(category);
                 _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully";
-            }
-            return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Product Category Updated" });
         }
 
         [HttpGet]

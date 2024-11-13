@@ -4,11 +4,11 @@
         <h1>Category To Update</h1>
     </div>
     <div class="row">
-        <form method="post" enctype="multipart/form-data">
-            <input asp-for="Id" hidden/>
+        <form id="updateCategoryForm">
+            <input asp-for="Id" id="productCategoryId" hidden/>
             <div class="mb-3 row p-1">
                 <label asp-for="Name" class="p-0">Category Name</label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" id="categoryName"/>
                 <span asp-asp-validation-for="Name" class="text-danger"></span>
             </div>
             <button class="btn btn-success" type="submit">Edit</button>
@@ -16,3 +16,8 @@
         </form>
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="~/js/category.js"></script>
+}
