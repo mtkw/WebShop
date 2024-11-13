@@ -55,7 +55,7 @@ namespace WebShop.Areas.Admin.Controllers
         }
 
         [HttpPatch]
-        public IActionResult Edit(int id, [FromBody] ProductCategory category)
+        public IActionResult Edit([FromBody] ProductCategory category)
         {
                 _unitOfWork.ProductCategory.Update(category);
                 _unitOfWork.Save();
