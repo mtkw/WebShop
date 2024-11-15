@@ -56,14 +56,14 @@
                         }
 
                     </ul>
-                    <form method="post" class="d-flex">
+                    <form asp-controller="Products" asp-action="Search" method="get" class="d-flex">
                         <div class="col-4 m-0 p-0">
-                            <input type="text" class="form-control" aria-describedby="emailHelp">
+                            <input type="text" class="form-control" name="serachString" aria-describedby="emailHelp">
                         </div>
                         <div class="col-4 m-0 p-0">
                             @if(categories != null)
                             {
-                                <select class="form-select" aria-label="Categories">
+                                <select class="form-select" aria-label="Categories" name="categoryOption">
                                     <option selected value="0">All Categories</option>
                                     @foreach (var category in categories)
                                     {
@@ -73,7 +73,7 @@
                             }
                         </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary" style="margin-left: .5rem" asp-controller="Products" asp-action="Search">Search</button>
+                            <button type="submit" class="btn btn-primary" style="margin-left: .5rem">Search</button>
                         </div>
                     </form>
                     <partial name="_LoginPartial"/>

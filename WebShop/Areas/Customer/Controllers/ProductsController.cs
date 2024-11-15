@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using WebShop.Models;
 using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
@@ -44,12 +45,29 @@ namespace WebShop.Areas.Customer.Controllers
 
             return View(product);
         }
-        [HttpPost]
-        public IActionResult Search(string SearchPhrase)
+        [HttpGet]
+        public async Task<IActionResult> Search(string serachString, int categoryOption)
         {
-            var product = _unitOfWork.Product.GetFirstOrDefault(x => x.Name == SearchPhrase, includProperties: "Supplier,Category");
+            IQueryable<Product> products;
+            if (categoryOption == 0)
+            {
+                products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category").Where(x => x.Name.ToUpper().Contains(serachString.ToUpper()));
+            }
+            else
+            {
+                 products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category").Where(x => x.Name.ToUpper().Contains(serachString.ToUpper()) && x.ProductCategoryId == categoryOption);
+            }
 
-            return View("Details", product);
+            IQueryable<ProductCategory> categories = _unitOfWork.ProductCategory.GetAll();
+
+            var customVM = new ProductsByCategoryVM()
+            {
+                Products = products,
+                ProductCategories = categories,
+                SelectedCategory = categoryOption
+
+            };
+            return View(customVM);
         }
     }
 }
