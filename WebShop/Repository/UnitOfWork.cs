@@ -12,12 +12,17 @@ namespace WebShop.Repository
 
         public ISupplierRepository Supplier {  get; private set; }
 
+        
+
+        public IUserRepository ApplicationUser {  get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Product = new ProductRepository(_context);
             ProductCategory = new ProductCategoryRepository(_context);
             Supplier = new SupplierRepository(_context);
+            ApplicationUser = new UserRepository(_context);
         }
 
         public void Save()

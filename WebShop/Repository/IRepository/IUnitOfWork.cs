@@ -6,6 +6,8 @@
         IProductCategoryRepository ProductCategory { get; }
         ISupplierRepository Supplier { get; }
 
+        IUserRepository ApplicationUser { get; } 
+
         void Save();
     }
 }
