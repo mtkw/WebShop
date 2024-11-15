@@ -16,11 +16,11 @@ namespace WebShop.Data
         public DbSet<ProductCategory> Categories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ApplicationUser> applicationUsers { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-UEUF85V;Database=WebShop;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=LAPTOP-MVI6AM12;Database=WebShop;Trusted_Connection=True;TrustServerCertificate=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,7 +38,11 @@ namespace WebShop.Data
                 new ProductCategory { Id = 8, Name = "Routers and Modems"},
                 new ProductCategory { Id = 9, Name = "Desktop Computers" },
                 new ProductCategory { Id = 10, Name = "Consoles" },
-                new ProductCategory { Id = 11, Name = "SmartWatches" }
+                new ProductCategory { Id = 11, Name = "SmartWatches" }, 
+                new ProductCategory { Id = 12, Name = "All Products" }
+                
+                
+                
     );
 
             modelBuilder.Entity<Supplier>().HasData(

@@ -153,7 +153,7 @@ namespace WebShop.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, Roles.Role_User); // Przypisanie roli dla nowo tworzonego użytkownika. Domyślnie kazdy użytkownik będzie tworzony w roli User
+                    await _userManager.AddToRoleAsync(user, Roles.Role_Admin); // Przypisanie roli dla nowo tworzonego użytkownika. Domyślnie kazdy użytkownik będzie tworzony w roli User
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
