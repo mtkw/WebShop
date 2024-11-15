@@ -13,14 +13,22 @@ namespace WebShop.Repository
             _context = context;
         }
 
-        public async Task<List<ProductCategory>> GetAllAsync()
+        public Task<List<ProductCategory>> GetAllAsync()
         {
-            return await _context.Categories.ToListAsync();
+            return _context.Categories.ToListAsync();
         }
 
         public void Update(ProductCategory productCategory)
         {
-            throw new NotImplementedException();
+            var existingEntity = _context.Categories.Local.FirstOrDefault(x => x.Id == productCategory.Id);
+            if (existingEntity == null)
+            {
+                _context.Categories.Attach(productCategory);
+            }
+            else
+            {
+                _context.Entry(existingEntity).CurrentValues.SetValues(productCategory);
+            }
         }
 
         

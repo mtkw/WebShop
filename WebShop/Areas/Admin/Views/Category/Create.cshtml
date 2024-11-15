@@ -1,23 +1,18 @@
 ﻿@model ProductCategory
 <div class="container">
     <div class="row">
-        <h1>Category To Update</h1>
+        <h1>New Category</h1>
     </div>
     <div class="row">
-        <form id="updateCategoryForm">
-            <input asp-for="Id" id="productCategoryId" hidden/>
+        <form method="post" enctype="multipart/form-data">
+            <input asp-for="Id" hidden />
             <div class="mb-3 row p-1">
                 <label asp-for="Name" class="p-0">Category Name</label>
-                <input asp-for="Name" class="form-control" id="categoryName"/>
+                <input asp-for="Name" class="form-control" />
                 <span asp-asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <button class="btn btn-success" type="submit">Edit</button>
+            <button class="btn btn-success" type="submit">Create New Category</button>
             <a class="btn btn-outline-dark" asp-area="Admin" asp-controller="Category" asp-action="Index">Back To Product Category List Page</a>
         </form>
     </div>
 </div>
-
-@section Scripts
-{
-    <script src="~/js/category.js"></script>
-}

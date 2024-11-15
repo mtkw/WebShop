@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Models;
 using WebShop.Repository.IRepository;
@@ -24,19 +25,26 @@ namespace WebShop.Areas.Admin.Controllers
             return View(categories);
         }
 
-/*        [HttpDelete("/Admin/Category/{id}")]*/ //Popracować nad implementacją RESTAPI
-        public IActionResult Delete(int id) 
+        //TestRestApi
+        [HttpDelete]
+        public IActionResult Delete(int id)
         {
-            if (id == 0) 
-            { 
-                return NotFound(new { message = "Product not found." });
+            var category = _unitOfWork.ProductCategory.GetAll().Where(x=>x.Id == id).FirstOrDefault();
+
+            if (category == null)
+            {
+                return Json(new { success = false, message = "Error while deleteing" });
             }
-
-            var categoryToDelete = _unitOfWork.ProductCategory.GetAll().Where(x=>x.Id == id).First();
-            _unitOfWork.ProductCategory.Remove(categoryToDelete);
+            _unitOfWork.ProductCategory.Remove(category);
             _unitOfWork.Save();
+            return Json(new { success = true, message = "Product Category Deleted" });
+        }
 
-            return Ok(new { message = "Category deleted successfully." });
+        [HttpGet]
+        public IActionResult GetAll() 
+        {
+            List<ProductCategory> categories = _unitOfWork.ProductCategory.GetAll().ToList();
+            return Json(new {data = categories});
         }
 
         [HttpGet]
@@ -44,6 +52,30 @@ namespace WebShop.Areas.Admin.Controllers
         {
             var categoryToUpdate = _unitOfWork.ProductCategory.GetAll().Where(x=> x.Id == id).First();
             return View(categoryToUpdate);
+        }
+
+        [HttpPatch]
+        public IActionResult Edit([FromBody] ProductCategory category)
+        {
+                _unitOfWork.ProductCategory.Update(category);
+                _unitOfWork.Save();
+                TempData["success"] = "Category updated successfully";
+                return Json(new { success = true, message = "Product Category Updated" });
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(ProductCategory category)
+        {
+            _unitOfWork.ProductCategory.Add(category);
+            _unitOfWork.Save();
+            TempData["success"] = "Category created successfully";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -1,0 +1,54 @@
+﻿@using WebShop.Models.Views
+@model ProductsByCategoryVM
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Categories</h3>
+            <ul class="list-group">
+                @foreach (var category in Model.ProductCategories)
+                {
+                    <li class="list-group-item @(category.Id == Model.SelectedCategory ? "active" : "")">
+                        <a href="@Url.Action("Index", new { categoryId = category.Id })" class="@(category.Id == Model.SelectedCategory ? "text-light" : "text-dark")">
+                            @category.Name
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
+                                <img class="card-img-top" src="~/img/@(product.Name).jpg" alt="@product.Name" style="height: 200px;">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Name</h5>
+                                <p class="card-text">@product.Description</p>
+                                <p class="card-text"><strong>Price: @product.Price.ToString("C2")</strong></p>
+                                <p class="card-text">
+                                    <a href="@Url.Action("Index", new { supplierId = product.SupplierId, categoryId = product.ProductCategoryId})">
+                                        Supplier: @product.Supplier.Name
+                                    </a>
+
+                                </p>
+                                <p class="card-text">
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
+                                       class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
+                                        View Details
+                                    </a>
+                                </p>
+                                @*                                 <a class="btn btn-primary" onclick="addToCart()" asp-controller="Home" asp-action="AddToCart" asp-route-productId="@product.Id">Add to Cart</a>
+                            *@
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
