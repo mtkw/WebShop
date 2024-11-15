@@ -44,5 +44,12 @@ namespace WebShop.Areas.Customer.Controllers
 
             return View(product);
         }
+        [HttpPost]
+        public IActionResult Search(string SearchPhrase)
+        {
+            var product = _unitOfWork.Product.GetFirstOrDefault(x => x.Name == SearchPhrase, includProperties: "Supplier,Category");
+
+            return View("Details", product);
+        }
     }
 }
