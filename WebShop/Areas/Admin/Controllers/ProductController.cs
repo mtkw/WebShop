@@ -72,7 +72,6 @@ namespace WebShop.Areas.Admin.Controllers
                         //delete old image
                         var oldImagePath = Path.Combine(productPath, productVM.Product.ImgPath);
 
-                        //Błędna ścieżka oldImagePath do poprawy
                         if (System.IO.File.Exists(oldImagePath))
                         {
                             System.IO.File.Delete(oldImagePath);
@@ -89,14 +88,16 @@ namespace WebShop.Areas.Admin.Controllers
                 if (productVM.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(productVM.Product);
+                    TempData["success"] = "Product created successfully";
                 }
                 else
                 {
                     _unitOfWork.Product.Update(productVM.Product);
+                    TempData["success"] = "Product updated successfully";
                 }
 
                 _unitOfWork.Save();
-                TempData["success"] = "Category created successfully";
+                
                 return RedirectToAction("Index");
             }
             else
@@ -114,7 +115,6 @@ namespace WebShop.Areas.Admin.Controllers
             }
             return View(productVM);
         }
-
 
         #region APICALLS
         [HttpGet]
