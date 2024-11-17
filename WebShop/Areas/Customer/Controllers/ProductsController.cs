@@ -24,7 +24,17 @@ namespace WebShop.Areas.Customer.Controllers
         }
         public IActionResult Index(int? categoryId)
         {
-            IQueryable<Product> products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category").Where(x=>x.ProductCategoryId==categoryId);
+            ProductCategory category = _unitOfWork.ProductCategory.Get(x=>x.Id==(categoryId.HasValue ? categoryId.Value : 1));
+            IQueryable<Product> products;
+            if (category.Name == "All Products")
+            {
+                products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category");
+            }
+            else
+            {
+                products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category").Where(x => x.ProductCategoryId == categoryId);
+            }
+            
             IQueryable<ProductCategory> categories = _unitOfWork.ProductCategory.GetAll();
 
             var customVM = new ProductsByCategoryVM()
