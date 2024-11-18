@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebShop.Data;
 
@@ -11,9 +12,11 @@ using WebShop.Data;
 namespace WebShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241116193338_LenovoPhones")]
+    partial class LenovoPhones
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,9 +263,6 @@ namespace WebShop.Migrations
                     b.Property<int>("ProductCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
 
@@ -284,7 +284,6 @@ namespace WebShop.Migrations
                             Name = "Amazon Fire",
                             Price = 49.899999999999999,
                             ProductCategoryId = 1,
-                            Quantity = 0,
                             SupplierId = 1
                         },
                         new
@@ -296,7 +295,6 @@ namespace WebShop.Migrations
                             Name = "Lenovo IdeaPad Miix 700",
                             Price = 479.89999999999998,
                             ProductCategoryId = 3,
-                            Quantity = 0,
                             SupplierId = 2
                         },
                         new
@@ -308,7 +306,6 @@ namespace WebShop.Migrations
                             Name = "Amazon Fire HD 8",
                             Price = 89.900000000000006,
                             ProductCategoryId = 1,
-                            Quantity = 0,
                             SupplierId = 1
                         },
                         new
@@ -320,7 +317,6 @@ namespace WebShop.Migrations
                             Name = "iPhone 12",
                             Price = 799.89999999999998,
                             ProductCategoryId = 2,
-                            Quantity = 0,
                             SupplierId = 4
                         },
                         new

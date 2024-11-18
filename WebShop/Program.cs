@@ -19,7 +19,10 @@ namespace WebShop
             builder.Services.AddControllersWithViews();
 
             //Add DatabaseConfiguration
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnecion")));
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            { options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnecion")).
+                EnableSensitiveDataLogging();
+            }); 
 
 
             //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>(); // Domyœlna konfiguracja tylko do rejesracji i logowania u¿ytkowników bez podzia³u na role
@@ -49,6 +52,7 @@ namespace WebShop
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
