@@ -10,6 +10,6 @@ namespace WebShop.Models
         [Required]
         [MaxLength(20)]
         [DisplayName("Supplier Name")]
-        public string Name { get; set; }
+        public string ?Name { get; set; }
     }
 }

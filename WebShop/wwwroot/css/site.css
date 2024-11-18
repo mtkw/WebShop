@@ -1,5 +1,5 @@
 html {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 @media (min-width: 768px) {
@@ -21,20 +21,20 @@ body {
   margin-bottom: 60px;
 }
 
-/* Default height for large screens */
+
 .carousel-image {
     height: 250px;
     
 }
 
-/* Adjust height for medium screens */
+
 @media (max-width: 768px) {
     .carousel-image {
         height: 300px;
     }
 }
 
-/* Adjust height for small screens */
+
 @media (max-width: 576px) {
     .carousel-image {
         height: 200px;
@@ -42,21 +42,21 @@ body {
 }
 
 .carousel-caption {
-    font-size: 1.2rem; /* Default font size */
+    font-size: 1.2rem; 
 }
 
 @media (max-width: 768px) {
     .carousel-caption {
-        font-size: 1rem; /* Smaller font size on mobile */
+        font-size: 1rem; 
     }
 }
 
 .carousel-item img {
-    margin: 0 auto; /* this will align the image to center. */
-    width: auto; /* for those images which don't have a width specified, but has a max-height will be auto adjusted */
+    margin: 0 auto; 
+    width: auto; 
 }
 
-/* Style for the hover bar under the nav links */
+
 .nav-item {
     position: relative; 
 }
@@ -71,18 +71,18 @@ body {
     transition: width 0.3s ease, background-color 0.3s ease;
 }
 
-/* On hover, make the bar visible and change its color */
+
 .nav-item:hover .hover-bar {
-    width: 100%; /* Bar expands to full width */
-    background-color: rgba(0, 123, 255, 0.7); /* Bright color on hover */
+    width: 100%; 
+    background-color: rgba(0, 123, 255, 0.7); 
 }
 
 
 .nav-item a:hover {
-    color: #fff; /* Change text color when hovering */
+    color: #fff; 
 }
 
-/* Remove underline from links inside list-group items */
+
 .list-group-item a {
     text-decoration: none; 
 }
@@ -98,58 +98,65 @@ body {
     border-top-right-radius: 10px;
 }
 
-/* The card with an animated border effect */
-.box {
-    width: 300px;
-    margin: 0 auto;
-    padding: 2px;
-    background-color: #eaab00; /* Gold background color */
-    border-radius: 10px; /* Optional rounded corners */
-    position: relative;
-    overflow: hidden; /* Ensures that the border stays inside the card */
+.custom-dropdown {
+    appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="%23e0e0e0"/><path d="M7 10l5 5 5-5z" fill="%23000"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 24px;
+    padding-right: 50px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-/* Inner content of the card */
-.content {
-    background: white;
-    padding: 2em;
+
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+/*.circle {
+    --circle-size: 40px;
+    position: fixed;
+    height: var(--circle-size);
+    width: var(--circle-size);
+    border: 1px solid black;
+    border-radius: 100%;
+    top: calc(var(--circle-size) / 2 * -1);
+    left: calc(var(--circle-size) / 2 * -1);
+    pointer-events: none;
+}*/
+
+.circle {
+    --circle-size: 90px;
+    position: fixed;
+    height: var(--circle-size);
+    width: var(--circle-size);
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 1; /* Keeps the content on top of the animated border */
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.1s ease-out;
 }
 
-/* Animated border effect */
-.box::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 2px solid transparent;
-    border-radius: 10px; /* Same border-radius as the card */
-    background-image: linear-gradient(white, white), linear-gradient(white, white);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-    animation: drawBorderFromCenter 4s forwards;
+.text-line {
+    margin: 2px 0; 
 }
 
-/* Animation for drawing the border from the center */
-@keyframes drawBorderFromCenter {
-    0% {
-        background-size: 0 2px, 0 100%;
-    }
 
-    20% {
-        background-size: 100% 2px, 100% 100%;
-    }
 
-    66% {
-        background-size: 100% 2px, 100% 98%;
-    }
 
-    99% {
-        background-size: 100% 2px, 100% 98%;
-    }
-}

@@ -10,5 +10,6 @@ namespace WebShop.Repository.IRepository
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includProperties = null);
 
+        
     }
 }

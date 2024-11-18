@@ -1,21 +1,41 @@
 ﻿@using WebShop.Models.Views
-@model ProductsByCategoryVM
+@model ProductSupplierCategoryVM
 
 <div class="container">
     <div class="row">
+        
         <div class="col-md-3">
-            <h3>Categories</h3>
+           
+
+            
+            <h4>Suppliers</h4>
+
+            <select id="supplierId" name="supplierId" class="form-control custom-dropdown cursor-pointer " onchange="window.location.href = '?supplierId=' + this.value">
+                    <option value="">Select Supplier</option>
+                    @foreach (var supplier in Model.Suppliers)
+                    {
+                    <option value="@supplier.Id" selected= "@(supplier.Id == Model.SelectedSupplierId )" >
+                            @supplier.Name
+                        </option>
+                    }
+            </select>
+            
+
+           
+            <h4 class="mt-4">Categories</h4>
             <ul class="list-group">
-                @foreach (var category in Model.ProductCategories)
+                @foreach (var category in Model.Categories)
                 {
                     <li class="list-group-item @(category.Id == Model.SelectedCategory ? "active" : "")">
-                        <a href="@Url.Action("Index", new { categoryId = category.Id })" class="@(category.Id == Model.SelectedCategory ? "text-light" : "text-dark")">
+                        <a href="@Url.Action("Index", new { supplierId = Model.SelectedSupplierId, categoryId = category.Id })" class="@(category.Id == Model.SelectedCategory ? "text-light" : "text-dark")">
                             @category.Name
                         </a>
                     </li>
                 }
             </ul>
         </div>
+
+        
         <div class="col-md-9">
             <div class="row">
                 @foreach (var product in Model.Products)
@@ -23,29 +43,19 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                            <img class="card-img-top" src="~/img/@(product.Name).jpg" alt="@product.Name" style="height: 200px;">
+                                <img class="card-img-top" src="~/img/@(product.Name).jpg" alt="@product.Name" style="height: 200px;">
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title">@product.Name</h5>
                                 <p class="card-text">@product.Description</p>
                                 <p class="card-text"><strong>Price: @product.Price.ToString("C2")</strong></p>
-                                <p class="card-text">
-                                    <a asp-controller="Supplier" asp-action="Index" asp-route-supplierId="@product.SupplierId">
-                                        Supplier: @product.Supplier.Name
-                                    </a>
-
-
-
-                                    
-                                </p>
+                               
                                 <p class="card-text">
                                     <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
-                                       class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
+                                       class="btn btn-outline-primary btn-sm d-block" style="border-radius: 20px;">
                                         View Details
                                     </a>
                                 </p>
-@*                                 <a class="btn btn-primary" onclick="addToCart()" asp-controller="Home" asp-action="AddToCart" asp-route-productId="@product.Id">Add to Cart</a>
- *@
                             </div>
                         </div>
                     </div>
@@ -54,5 +64,9 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 
