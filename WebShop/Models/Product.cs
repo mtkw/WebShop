@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +17,7 @@ namespace WebShop.Models
         public double Price { get; set; }
         public string Currency {  get; set; }
         public string Description { get; set; }
-        public string ImgPath { get; set; }
+        public string? ImgPath { get; set; }
         public int ProductCategoryId { get; set; }
         [ForeignKey("ProductCategoryId")]
         [ValidateNever]
@@ -25,5 +26,7 @@ namespace WebShop.Models
         [ForeignKey("SupplierId")]
         [ValidateNever]
         public Supplier Supplier { get; set; }
+
+        public int Quantity { get; set; }
     }
 }

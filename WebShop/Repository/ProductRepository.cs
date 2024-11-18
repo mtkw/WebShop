@@ -14,7 +14,7 @@ namespace WebShop.Repository
 
         public void Update(Product product)
         {
-            throw new NotImplementedException();
+            _context.Update(product);
         }
     }
 }

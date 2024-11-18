@@ -13,8 +13,18 @@
         <img src="~/img/@(Model.Name).jpg" alt="@Model.Name" class="card-img-top img-fluid" />
 
         <div class="card-body">
-            <p class="card-text text-muted fs-5">Price: $@Model.Price @Model.Currency</p>
+            @if(Model.Quantity == 0)
+            {
+                <div class="container"><img src="~/img/sold-out.png" style="height: 100px" class="mx-auto" /></div>
+                <p class="card-text text-muted fs-5"><s>Price: $@Model.Price @Model.Currency</s></p>
+            }
+            else
+            {
+                <p class="card-text text-muted fs-5">Price: $@Model.Price @Model.Currency</p>
+            }
+            
             <p class="card-text text-secondary" style="font-size: 1.1rem;">@Model.Description</p>
+            <p class="card-text text-secondary" style="font-size: 1.1rem;">Available Quantity: @Model.Quantity</p>
 
             
             <p class="card-text"><strong>Category:</strong> @Model.Category.Name</p>
@@ -23,6 +33,31 @@
 
        
         <div class="card-footer">
+            @if(User.IsInRole(Roles.Role_User) && Model.Quantity > 0)
+            {
+                <p class="card-text">
+                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id"
+                       class="btn btn-primary">
+                        Add To Cart
+                    </a>
+                </p>
+                
+            }
+            @if (User.IsInRole(Roles.Role_Admin))
+            {
+                <p class="card-text">
+                    <a asp-area="Admin" asp-controller="Product" asp-action="Upsert" asp-route-id="@Model.Id"
+                       class="btn btn-secondary">
+                        Edit Product
+                    </a>
+                </p>
+                <p class="card-text">
+                    <a asp-controller="Products" asp-action="DeleteFromMainPage" asp-route-id="@Model.Id"
+                       class="btn btn-danger">
+                        Delete Product
+                    </a>
+                </p>
+            }
             <a href="/" class="btn btn-primary">Back to Home</a>
         </div>
     </div>

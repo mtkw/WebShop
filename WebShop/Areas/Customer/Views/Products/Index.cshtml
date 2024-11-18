@@ -23,29 +23,73 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                            <img class="card-img-top" src="~/img/@(product.Name).jpg" alt="@product.Name" style="height: 200px;">
+                            <img class="card-img-top" src="~/img/@(product.ImgPath)" alt="@product.Name" style="height: 200px;">
                             </a>
                             <div class="card-body">
-                                <h5 class="card-title">@product.Name</h5>
+                                
+                                    @if (product.Quantity == 0)
+                                    {
+                                    <div class="container"><img src="~/img/sold-out.png" style="height: 100px" class="mx-auto"/></div>
+                                    }
+@*                                 @if(product.Quantity <= 2 && product.Quantity != 0)
+                                {
+                                    <h3><span class="text-capitalize text-primary"><strong><p class="text-center">Last pieces</p></strong></span></h3>
+                                } *@
+
+                                <h5 class="card-title">@product.Name </h5>
                                 <p class="card-text">@product.Description</p>
-                                <p class="card-text"><strong>Price: @product.Price.ToString("C2")</strong></p>
-                                <p class="card-text">
-                                    <a asp-controller="Supplier" asp-action="Index" asp-route-supplierId="@product.SupplierId">
-                                        Supplier: @product.Supplier.Name
-                                    </a>
 
+                                @if(product.Quantity > 0)
+                                {
+                                    <p class="card-text"><strong>Price: @product.Price USD</strong></p>
+                                    <p class="card-text"><strong>Quantities available:</strong> @product.Quantity</p>
+                                    <p class="card-text">
+                                        <strong>Supplier: </strong><a href="@Url.Action("Index", new { supplierId = product.SupplierId, categoryId = product.ProductCategoryId})">
+                                             @product.Supplier.Name
+                                        </a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="card-text"><s>Price: @product.Price USD</s></p>
+                                    <p class="card-text text-bg-info"><strong>Product temporarily unavailable</strong></p>
+                                    <p class="card-text"><strong>Quantities available:</strong> @product.Quantity</p>
+                                    <p class="card-text">
+                                        <strong>Supplier: </strong><a href="@Url.Action("Index", new { supplierId = product.SupplierId, categoryId = product.ProductCategoryId})">
+                                             @product.Supplier.Name
+                                        </a>
 
+                                    </p>
+                                }
 
-                                    
-                                </p>
                                 <p class="card-text">
                                     <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
                                        class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
                                         View Details
                                     </a>
                                 </p>
-@*                                 <a class="btn btn-primary" onclick="addToCart()" asp-controller="Home" asp-action="AddToCart" asp-route-productId="@product.Id">Add to Cart</a>
- *@
+                                @if (User.IsInRole(Roles.Role_Admin))
+                                {
+                                    <p class="card-text">
+                                        <a asp-area="Admin" asp-controller="Product" asp-action="Upsert" asp-route-id="@product.Id"
+                                           class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
+                                            Edit Product
+                                        </a>
+                                    </p>
+                                    <p class="card-text">
+                                        <a asp-controller="Products" asp-action="DeleteFromMainPage" asp-route-id="@product.Id"
+                                           class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
+                                            Delete Product
+                                        </a>
+                                    </p>
+                                }
+                                @if (!User.IsInRole(Roles.Role_Admin) && product.Quantity > 0)
+                                {
+                                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id"
+                                       class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
+                                        Add To Cart
+                                    </a>
+                                }
                             </div>
                         </div>
                     </div>
