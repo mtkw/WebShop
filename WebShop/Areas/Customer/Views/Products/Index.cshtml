@@ -44,7 +44,7 @@
                                     <p class="card-text"><strong>Price: @product.Price USD</strong></p>
                                     <p class="card-text"><strong>Quantities available:</strong> @product.Quantity</p>
                                     <p class="card-text">
-                                        <strong>Supplier: </strong><a href="@Url.Action("Index", new { supplierId = product.SupplierId, categoryId = product.ProductCategoryId})">
+                                        <strong>Supplier: </strong><a asp-controller="Supplier" asp-action="Index" asp-route-supplierId="@product.SupplierId">
                                              @product.Supplier.Name
                                         </a>
                                     </p>
@@ -55,7 +55,7 @@
                                     <p class="card-text text-bg-info"><strong>Product temporarily unavailable</strong></p>
                                     <p class="card-text"><strong>Quantities available:</strong> @product.Quantity</p>
                                     <p class="card-text">
-                                        <strong>Supplier: </strong><a href="@Url.Action("Index", new { supplierId = product.SupplierId, categoryId = product.ProductCategoryId})">
+                                        <strong>Supplier: </strong><a asp-controller="Supplier" asp-action="Index" asp-route-supplierId="@product.SupplierId">
                                              @product.Supplier.Name
                                         </a>
 
