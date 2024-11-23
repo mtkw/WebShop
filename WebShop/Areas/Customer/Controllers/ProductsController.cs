@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
@@ -45,6 +46,39 @@ namespace WebShop.Areas.Customer.Controllers
 
             };
             return View(customVM);
+        }
+
+        [Authorize] //Zebezpieczenie że ta metoda zostanie wykonana tylko dla zalogowanych użytkowników bez znaczenia typu użytkownika
+        public IActionResult AddToCart(int productId)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.UserId == userId && u.ProductId == productId);
+
+            if (cartFromDB != null)
+            {
+                //shopping cart exist
+                cartFromDB.Count += 1;
+                _unitOfWork.ShoppingCart.Update(cartFromDB);
+            }
+            else
+            {
+                //add cart record
+                ShoppingCart cart = new()
+                {
+                    Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,
+                    Product = _unitOfWork.Product.Get(u => u.Id == productId /*includProperties: "Category,Supplier"*/),
+                    Count = 1,
+                    ProductId = productId,
+                    UserId = userId,
+
+                };
+                _unitOfWork.ShoppingCart.Add(cart);
+            }
+            TempData["success"] = "Cart updated successfully";
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Details(int id) 

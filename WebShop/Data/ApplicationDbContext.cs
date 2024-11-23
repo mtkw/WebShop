@@ -16,6 +16,7 @@ namespace WebShop.Data
         public DbSet<ProductCategory> Categories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ShoppingCart> ShopinCarts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

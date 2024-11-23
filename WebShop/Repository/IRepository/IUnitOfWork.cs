@@ -7,6 +7,7 @@
         ISupplierRepository Supplier { get; }
 
         IUserRepository ApplicationUser { get; } 
+        IShoppingCartRepository ShoppingCart { get; }
 
         void Save();
     }

@@ -65,14 +65,18 @@ namespace WebShop.Repository
             _dbSet?.Remove(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includProperties = null, bool tracked = true)
         {
-            IQueryable<T> query = _dbSet;
-            if (filter != null)
+            IQueryable<T> query;
+            if (tracked)
             {
-                query = query.Where(filter);
+                query = _dbSet;
             }
-
+            else
+            {
+                query = _dbSet.AsNoTracking();
+            }
+            query = query.Where(filter);
             if (!string.IsNullOrEmpty(includProperties))
             {
                 foreach (var includeProp in includProperties
