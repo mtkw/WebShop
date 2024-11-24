@@ -7,13 +7,9 @@ namespace WebShop.Repository
     {
         public ApplicationDbContext _context;
         public IProductRepository Product { get; private set; }
-
         public IProductCategoryRepository ProductCategory {  get; private set; }
-
         public ISupplierRepository Supplier {  get; private set; }
         public IShoppingCartRepository ShoppingCart { get; private set; }
-        
-
         public IUserRepository ApplicationUser {  get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)

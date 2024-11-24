@@ -13,7 +13,7 @@ namespace WebShop.Repository
         public Repository(ApplicationDbContext context)
         {
             _context = context;
-            _dbSet = _context.Set<T>();
+            this._dbSet = _context.Set<T>();
         }
 
         public void Add(T entity)

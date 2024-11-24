@@ -14,7 +14,7 @@ namespace WebShop.Repository
 
         public void Update(ShoppingCart cart)
         {
-            _context.Update(cart);
+            _context.ShopingCarts.Update(cart);
         }
     }
 }

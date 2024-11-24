@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
@@ -49,12 +47,12 @@ namespace WebShop.Areas.Customer.Controllers
         }
 
         [Authorize] //Zebezpieczenie że ta metoda zostanie wykonana tylko dla zalogowanych użytkowników bez znaczenia typu użytkownika
-        public IActionResult AddToCart(int productId)
+        public IActionResult AddToCart(int id)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.UserId == userId && u.ProductId == productId);
+            ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.UserId == userId && u.ProductId == id);
 
             if (cartFromDB != null)
             {
@@ -68,9 +66,9 @@ namespace WebShop.Areas.Customer.Controllers
                 ShoppingCart cart = new()
                 {
                     Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,
-                    Product = _unitOfWork.Product.Get(u => u.Id == productId /*includProperties: "Category,Supplier"*/),
+                    Product = _unitOfWork.Product.Get(u => u.Id == id, includProperties: "Supplier,Category"),
                     Count = 1,
-                    ProductId = productId,
+                    ProductId = id,
                     UserId = userId,
 
                 };

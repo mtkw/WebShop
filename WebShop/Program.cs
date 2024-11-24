@@ -56,7 +56,7 @@ namespace WebShop
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseMiddleware<ProductCategoryMiddleware>(); // konfigfuracja Klasy Middleware
+            //app.UseMiddleware<ProductCategoryMiddleware>(); // konfigfuracja Klasy Middleware
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
