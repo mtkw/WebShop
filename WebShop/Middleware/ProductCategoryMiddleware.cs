@@ -15,7 +15,7 @@ namespace WebShop.Middleware
         }
         //Do konstruktora klasy Middleware można przekazywać tylko klasy o zasięgu Singleton dlatego IUnitOfWork które ma zasięg Scoped musi byc przekazane jako parametr w metodzie InvokeAsync. 
         // Dla interfejsów i serwisów o zasiegu innym niż Singleton nie jest możliwe ustawienie Dependecy Injection w konstruktorze klasy Middleware
-        public async Task InvokeAsync(HttpContext context, IUnitOfWork _unitOfWork) 
+        public async Task InvokeAsync(HttpContext context, IUnitOfWork _unitOfWork)
         {
             var categories = await _unitOfWork.ProductCategory.GetAllAsync();
             context.Items["CategoryList"] = categories;

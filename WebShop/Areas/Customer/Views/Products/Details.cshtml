@@ -36,7 +36,7 @@
             @if(User.IsInRole(Roles.Role_User) && Model.Quantity > 0)
             {
                 <p class="card-text">
-                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id"
+                    <a asp-controller="Products" asp-action="AddToCart" asp-route-productId="@Model.Id"
                        class="btn btn-primary">
                         Add To Cart
                     </a>

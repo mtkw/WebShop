@@ -5,7 +5,7 @@
         IProductRepository Product { get; }
         IProductCategoryRepository ProductCategory { get; }
         ISupplierRepository Supplier { get; }
-
+        IShoppingCartRepository ShoppingCart { get; }
         IUserRepository ApplicationUser { get; } 
 
         void Save();

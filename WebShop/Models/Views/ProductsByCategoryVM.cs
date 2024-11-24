@@ -2,8 +2,8 @@
 {
     public class ProductsByCategoryVM
     {
-        public IQueryable<Product> Products { get; set; }
-        public IQueryable<ProductCategory> ProductCategories { get; set; }
+        public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<ProductCategory> ProductCategories { get; set; }
         public int SelectedCategory { get; set; }
     }
 }

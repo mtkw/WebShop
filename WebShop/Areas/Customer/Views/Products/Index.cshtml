@@ -85,7 +85,7 @@
                                 }
                                 @if (!User.IsInRole(Roles.Role_Admin) && product.Quantity > 0)
                                 {
-                                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id"
+                                    <a asp-controller="Products" asp-action="AddToCart" asp-route-productId="@product.Id"
                                        class="btn btn-outline-primary btn-sm  d-block" style="border-radius: 20px;">
                                         Add To Cart
                                     </a>
