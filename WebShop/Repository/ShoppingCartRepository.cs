@@ -13,11 +13,6 @@ namespace WebShop.Repository
             _context = context;
         }
 
-        public Task<List<ShoppingCart>> GetAllAsync()
-        {
-            return _context.ShoppingCarts.ToListAsync();
-        }
-
         public void Update(ShoppingCart shoppingCart)
         {
             var existingEntity = _context.ShoppingCarts.Local.FirstOrDefault(x => x.Id == shoppingCart.Id);

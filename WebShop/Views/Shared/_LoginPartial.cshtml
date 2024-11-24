@@ -3,6 +3,10 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
+@{
+    var CartItemCounter = Context.Items["CartItemCounter"];
+}
+
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
@@ -10,7 +14,7 @@
         {
             <li class="nav-item">
                 <a class="nav-link" id="cart-icon" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
-                    <i class="bi bi-cart"></i>
+                    <i class="bi bi-cart"></i> <div class="cart-counter">@CartItemCounter</div>
                 </a>
             </li>
         }

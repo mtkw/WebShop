@@ -56,10 +56,10 @@ namespace WebShop
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseMiddleware<ProductCategoryMiddleware>(); // konfigfuracja Klasy Middleware
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<ProductCategoryMiddleware>(); // konfigfuracja Klasy Middleware // AUTHENTICATION AND AUTHORIZATION BEFORE MIDDLEWARE CLASS
             app.MapRazorPages(); // Druga czêœæ konfiguracji Razor Pages
             app.MapControllerRoute(
                 name: "default",

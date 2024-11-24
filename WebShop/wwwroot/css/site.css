@@ -157,6 +157,28 @@ body {
     margin: 2px 0; 
 }
 
+.cart-icon {
+    position: relative;
+    transform: scale(1.5);
+}
+
+.cart-counter {
+    position: absolute; /* Position the counter absolutely */
+    bottom: 0; /* Align to the bottom */
+    right: 0; /* Align to the right */
+    background-color: white; /* Background color for visibility */
+    color: red; /* Text color */
+    opacity: .6;
+    border-radius: 50%; /* Make it circular */
+    width: 15px; /* Set width */
+    height: 15px; /* Set height */
+    display: flex; /* Flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    font-size: 12px; /* Font size */
+    font-weight: 500;
+}
+
 
 
 
