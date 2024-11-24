@@ -6,6 +6,15 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+        @if (!User.IsInRole(Roles.Role_Admin))
+        {
+            <li class="nav-item">
+                <a class="nav-link" id="cart-icon" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
+                    <i class="bi bi-cart"></i>
+                </a>
+            </li>
+        }
+
     <li class="nav-item">
         <a id="manage" class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
     </li>
