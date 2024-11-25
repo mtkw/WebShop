@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
@@ -55,26 +52,45 @@ namespace WebShop.Areas.Customer.Controllers
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == productId);
+            Product productFromDB = _unitOfWork.Product.Get(u=> u.Id == productId);
 
             if (cartFromDB != null)
             {
-                //shopping cart exist
-                cartFromDB.Count += 1;
-                _unitOfWork.ShoppingCart.Update(cartFromDB);
+                if(productFromDB.Quantity == 0)
+                {
+                    TempData["errorr"] = "Product Sold Out. We will inform you when the product is available again.";
+                }
+                else
+                {
+                    //shopping cart exist
+                    cartFromDB.Count += 1;
+                    productFromDB.Quantity -= 1;
+                    _unitOfWork.ShoppingCart.Update(cartFromDB);
+                    _unitOfWork.Product.Update(productFromDB);
+                }
             }
             else
             {
-                //add cart record
-                ShoppingCart cart = new()
+                if (productFromDB.Quantity == 0)
                 {
-/*                    Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,*/ // ---> To był problem kolumna ID jest ustawiona jako Identity i jej wartość jest uzupełniania automatycznie
-                    Product = _unitOfWork.Product.Get(u => u.Id == productId /*includProperties: "Category,Supplier"*/),
-                    Count = 1,
-                    ProductId = productId,
-                    ApplicationUserId = userId,
+                    TempData["errorr"] = "Product Sold Out. We will inform you when the product is available again.";
+                }
+                else
+                {
+                    //add cart record
+                    ShoppingCart cart = new()
+                    {
+                        /*                    Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,*/ // ---> To był problem kolumna ID jest ustawiona jako Identity i jej wartość jest uzupełniania automatycznie
+                        Product = _unitOfWork.Product.Get(u => u.Id == productId /*includProperties: "Category,Supplier"*/),
+                        Count = 1,
+                        ProductId = productId,
+                        ApplicationUserId = userId,
 
-                };
-                _unitOfWork.ShoppingCart.Add(cart);
+                    };
+                    productFromDB.Quantity -= 1;
+                    _unitOfWork.ShoppingCart.Add(cart);
+                    _unitOfWork.Product.Update(productFromDB);
+                }
             }
             TempData["success"] = "Cart updated successfully";
             _unitOfWork.Save();
