@@ -7,7 +7,8 @@
         ISupplierRepository Supplier { get; }
         IShoppingCartRepository ShoppingCart { get; }
         IUserRepository ApplicationUser { get; } 
-
+        IOrderDetailRepository OrderDetail { get; }
+        IOrderHeaderRepository OrderHeader { get; }
         void Save();
     }
 }

@@ -3,7 +3,7 @@
     public class ShoppingCartVM
     {
         public IEnumerable<ShoppingCart> Products { get; set; }
+        public OrderHeader OrderHeader { get; set; }
         public int TotalCountOfProducts { get; set; }
-        public double TotalPrice { get; set; }
     }
 }

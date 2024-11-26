@@ -160,5 +160,11 @@ namespace WebShop.Areas.Customer.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Summary() 
+        { 
+            
+            return View(); 
+        }
     }
 }

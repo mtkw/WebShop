@@ -47,8 +47,11 @@
             @if(Model.TotalCountOfProducts > 0)
             {
                 <div class="card-footer mt-3">
-                    <strong>TOTAL PRICE:</strong> @Model.TotalPrice.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
+                    <strong>TOTAL PRICE:</strong> @Model.OrderHeader.OrderTotal.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
                     <strong>Total Quantity:</strong> @Model.TotalCountOfProducts
+                </div>
+                <div class="row">
+                    <a class="btn btn-outline-primary" asp-asp-area="Customer" asp-controller="ShoppingCart" asp-action="Summary">Summary</a>
                 </div>
             }
             else

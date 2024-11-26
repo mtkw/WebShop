@@ -29,8 +29,8 @@ namespace WebShop.Areas.Customer.Controllers
             {
                 Products = cartFromDB,
                 TotalCountOfProducts = CalculateCountOfProducts(cartFromDB),
-                TotalPrice = CalculateCartTotalPrice(cartFromDB)
             };
+            shoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(cartFromDB); // Do przemyślenia bo coś mi tu nie działa
 
 
             return View(shoppingCartVM);
