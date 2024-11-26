@@ -36,6 +36,67 @@ namespace WebShop.Areas.Customer.Controllers
             return View(shoppingCartVM);
         }
 
+        public IActionResult IncrementProductInCart(int cartId)
+        {
+            var cartFromDB = _unitOfWork.ShoppingCart.Get(u=>u.Id == cartId);
+            var productFromCart = _unitOfWork.Product.Get(u=>u.Id == cartFromDB.ProductId);
+
+            if(productFromCart.Quantity != 0)
+            {
+                cartFromDB.Count++;
+                _unitOfWork.ShoppingCart.Update(cartFromDB);
+                productFromCart.Quantity -= 1;
+                _unitOfWork.Product.Update(productFromCart);
+                TempData["success"] = "Add Item To Cart";
+            }
+            else
+            {
+                TempData["error"] = "Product sold out";
+            }
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult RemoveProductFromCart(int cartId)
+        {
+            var cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            var productFromCart = _unitOfWork.Product.Get(u => u.Id == cartFromDB.ProductId);
+
+            productFromCart.Quantity += cartFromDB.Count;
+            _unitOfWork.ShoppingCart.Remove(cartFromDB);
+            _unitOfWork.Product.Update(productFromCart);
+            TempData["success"] = "Item Removed From Cart";
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult DecrementProductInCart(int cartId)
+        {
+            var cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            var productFromCart = _unitOfWork.Product.Get(u => u.Id == cartFromDB.ProductId);
+
+            if (cartFromDB.Count == 1)
+            {
+                _unitOfWork.ShoppingCart.Remove(cartFromDB);
+                productFromCart.Quantity += 1;
+                _unitOfWork.Product.Update(productFromCart);
+                TempData["success"] = "Item Removed From Cart";
+            }
+            else
+            {
+                cartFromDB.Count--;
+                _unitOfWork.ShoppingCart.Update(cartFromDB);
+                productFromCart.Quantity += 1;
+                _unitOfWork.Product.Update(productFromCart);
+                TempData["success"] = "One item has been removed from the cart";
+            }
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private int CalculateCountOfProducts(List<ShoppingCart> cart) 
         { 
             var count = 0;

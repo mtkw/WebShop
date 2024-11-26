@@ -94,7 +94,8 @@ namespace WebShop.Areas.Customer.Controllers
             }
             TempData["success"] = "Cart updated successfully";
             _unitOfWork.Save();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Index", new { categoryId = productFromDB.ProductCategoryId });
 
         }
 
