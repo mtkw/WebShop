@@ -4,6 +4,7 @@ using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
+using WebShop.Utility;
 
 namespace WebShop.Areas.Customer.Controllers
 {
@@ -12,7 +13,8 @@ namespace WebShop.Areas.Customer.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-
+        [BindProperty]
+        public ShoppingCartVM ShoppingCartVM { get; set; }
         public ShoppingCartController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -25,15 +27,16 @@ namespace WebShop.Areas.Customer.Controllers
 
             List<ShoppingCart> cartFromDB = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includProperties: "Product").ToList();
 
-            var shoppingCartVM = new ShoppingCartVM()
+            ShoppingCartVM = new ShoppingCartVM()
             {
                 Products = cartFromDB,
                 TotalCountOfProducts = CalculateCountOfProducts(cartFromDB),
+                OrderHeader = new()
             };
-            shoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(cartFromDB); // Do przemyślenia bo coś mi tu nie działa
+            ShoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(cartFromDB);
 
 
-            return View(shoppingCartVM);
+            return View(ShoppingCartVM);
         }
 
         public IActionResult IncrementProductInCart(int cartId)
@@ -115,6 +118,73 @@ namespace WebShop.Areas.Customer.Controllers
                 totalPrice += (cartItem.Count * cartItem.Product.Price);
             }
             return totalPrice;
+        }
+        
+        public IActionResult Summary()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            List<ShoppingCart> cartFromDB = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includProperties: "Product").ToList();
+
+            ShoppingCartVM = new ShoppingCartVM()
+            {
+                Products = cartFromDB,
+                TotalCountOfProducts = CalculateCountOfProducts(cartFromDB),
+                OrderHeader = new()
+            };
+            ShoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(cartFromDB);
+            ShoppingCartVM.OrderHeader.User = _unitOfWork.ApplicationUser.Get(x=>x.Id == userId);
+
+            ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.User.Name;
+            ShoppingCartVM.OrderHeader.Surname = ShoppingCartVM.OrderHeader.User.Surname;
+            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.User.PhoneNumber;
+            ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.User.StreetAddress;
+            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.User.City;
+            ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.User.State;
+            ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.User.PostalCode;
+
+            return View(ShoppingCartVM);
+        }
+        [HttpPost]
+        [ActionName("Summary")]
+        public IActionResult SummaryPOST(ShoppingCartVM shoppingCartVM)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            List<ShoppingCart> cartFromDB = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includProperties: "Product").ToList();
+
+            ShoppingCartVM = new ShoppingCartVM()
+            {
+                Products = cartFromDB,
+                TotalCountOfProducts = CalculateCountOfProducts(cartFromDB),
+                OrderHeader = new()
+            };
+            ShoppingCartVM.OrderHeader.OrderDate= System.DateTime.Now;
+            ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
+
+            ShoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(cartFromDB);
+            ShoppingCartVM.OrderHeader.User = _unitOfWork.ApplicationUser.Get(x => x.Id == userId);
+
+            ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
+
+            _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+            _unitOfWork.Save();
+
+            foreach (var cart in ShoppingCartVM.Products)
+            {
+                OrderDetail orderDetail = new()
+                {
+                   ProductId = cart.ProductId, 
+                   OrderHeaderId = ShoppingCartVM.OrderHeader.Id,
+                   Price = cart.Product.Price,
+                   Count = cart.Count
+                };
+            }
+
+            return View(shoppingCartVM);
         }
 
     }
