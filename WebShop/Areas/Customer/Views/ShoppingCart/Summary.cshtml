@@ -39,15 +39,6 @@
                             </div>
                             <div class="row my-1">
                                 <div class="col-3">
-                                    <label>Surname</label>
-                                </div>
-                                <div class="col-9">
-                                    <input asp-for="OrderHeader.Surname" class="form-control" />
-                                    <span asp-validation-for="OrderHeader.Surname" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row my-1">
-                                <div class="col-3">
                                     <label>Phone</label>
                                 </div>
                                 <div class="col-9">
@@ -104,7 +95,7 @@
                                             <h6 class="my-0">@details.Product.Name</h6>
                                             <small class="text-muted">Quantity: @details.Count</small>
                                         </div>
-                                        <span class="text-muted">@((details.Product.Price * details.Count).ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</span>
+                                        <span class="text-muted">@(details.Product.Price * details.Count) USD</span>
                                     </li>
                                 }
 
