@@ -1,0 +1,65 @@
+﻿@using System.Globalization
+@using WebShop.Models.Views
+@model ShoppingCartVM
+
+<div class="container">
+    <div class="row shadow">
+        <div class="col-12 text-center bg-secondary bg-gradient text-light">
+            <h1>Shopping Cart</h1>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4">
+            <a class="btn btn-dark" asp-area="Customer" asp-controller="Products" asp-action="Index" asp-route-categoryId="12">Continue shopping</a>
+        </div>
+    </div>
+    <div class="row mt-2 justify-content-center align-items-center">
+        <div class="col-12 text-center">
+            @foreach(var product in Model.Products)
+            {
+            <div class="row mt-4 shadow justify-content-center align-content-center">
+                <div class="col-3">
+                    <img class="card-img-top" src="~/img/@(product.Product.ImgPath)" alt="@product.Product.Name" style="height: 100px;">
+                </div>
+                <div class="col-2">
+                    @product.Product.Name
+                </div>
+                <div class="col-2">
+                    @product.Product.Price @product.Product.Currency
+                </div>
+                    <div class="col-1">
+                        @product.Count
+                    </div>
+                    <div class="col-2">
+                        @(product.Count * product.Product.Price) @product.Product.Currency
+                    </div>
+                <div class="col-1">
+                        <a class="btn btn-outline-success" asp-area="Customer" asp-controller="ShoppingCart" asp-action="IncrementProductInCart" asp-route-cartId="@product.Id">+</a>
+                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="DecrementProductInCart" asp-route-cartId="@product.Id">-</a>
+                </div>
+                    <div class="col-1">
+                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="RemoveProductFromCart" asp-route-cartId="@product.Id">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+            </div>  
+            }
+            @if(Model.TotalCountOfProducts > 0)
+            {
+                <div class="card-footer mt-3">
+                    <strong>TOTAL PRICE:</strong> @Model.OrderHeader.OrderTotal.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
+                    <strong>Total Quantity:</strong> @Model.TotalCountOfProducts
+                </div>
+                <div class="row justify-content-center">
+                    <a class="btn btn-outline-primary col-2" asp-asp-area="Customer" asp-controller="ShoppingCart" asp-action="Summary">Summary</a>
+                </div>
+            }
+            else
+            {
+                <div class="card-footer">
+                    Your cart is empty. Add any item to continue.
+                </div>
+            }
+        </div>
+    </div>
+</div>

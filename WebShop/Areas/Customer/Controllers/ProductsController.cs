@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
@@ -25,7 +24,7 @@ namespace WebShop.Areas.Customer.Controllers
         public IActionResult Index(int? categoryId)
         {
             ProductCategory category = _unitOfWork.ProductCategory.Get(x=>x.Id==(categoryId.HasValue ? categoryId.Value : 1));
-            IQueryable<Product> products;
+            IEnumerable<Product> products;
             if (category.Name == "All Products")
             {
                 products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category");
@@ -35,7 +34,7 @@ namespace WebShop.Areas.Customer.Controllers
                 products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category").Where(x => x.ProductCategoryId == categoryId);
             }
             
-            IQueryable<ProductCategory> categories = _unitOfWork.ProductCategory.GetAll();
+            IEnumerable<ProductCategory> categories = _unitOfWork.ProductCategory.GetAll();
 
             var customVM = new ProductsByCategoryVM()
             {
@@ -45,6 +44,59 @@ namespace WebShop.Areas.Customer.Controllers
 
             };
             return View(customVM);
+        }
+        [Authorize]
+        public IActionResult AddToCart (int productId)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == productId);
+            Product productFromDB = _unitOfWork.Product.Get(u=> u.Id == productId);
+
+            if (cartFromDB != null)
+            {
+                if(productFromDB.Quantity == 0)
+                {
+                    TempData["errorr"] = "Product Sold Out. We will inform you when the product is available again.";
+                }
+                else
+                {
+                    //shopping cart exist
+                    cartFromDB.Count += 1;
+                    productFromDB.Quantity -= 1;
+                    _unitOfWork.ShoppingCart.Update(cartFromDB);
+                    _unitOfWork.Product.Update(productFromDB);
+                }
+            }
+            else
+            {
+                if (productFromDB.Quantity == 0)
+                {
+                    TempData["errorr"] = "Product Sold Out. We will inform you when the product is available again.";
+                }
+                else
+                {
+                    //add cart record
+                    ShoppingCart cart = new()
+                    {
+                        /*                    Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,*/ // ---> To był problem kolumna ID jest ustawiona jako Identity i jej wartość jest uzupełniania automatycznie
+                        Product = _unitOfWork.Product.Get(u => u.Id == productId /*includProperties: "Category,Supplier"*/),
+                        Count = 1,
+                        ProductId = productId,
+                        ApplicationUserId = userId,
+
+                    };
+                    productFromDB.Quantity -= 1;
+                    _unitOfWork.ShoppingCart.Add(cart);
+                    _unitOfWork.Product.Update(productFromDB);
+                }
+            }
+            TempData["success"] = "Cart updated successfully";
+            _unitOfWork.Save();
+
+            return RedirectToAction("Index", new { categoryId = productFromDB.ProductCategoryId });
+
         }
 
         public IActionResult Details(int id) 
@@ -107,6 +159,12 @@ namespace WebShop.Areas.Customer.Controllers
             TempData["success"] = "Product deleted successfully";
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Summary() 
+        { 
+            
+            return View(); 
         }
     }
 }

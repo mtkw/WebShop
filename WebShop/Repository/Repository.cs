@@ -21,6 +21,25 @@ namespace WebShop.Repository
             _dbSet.Add(entity);
         }
 
+        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includProperties = null)
+        {
+            IQueryable<T> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (!string.IsNullOrEmpty(includProperties))
+            {
+                foreach (var includeProp in includProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return query.ToListAsync();
+        }
+
         public IQueryable<T> GetAll(Expression<Func<T, bool>>? filter, string? includProperties = null)
         {
             IQueryable<T> query = _dbSet;
@@ -83,5 +102,6 @@ namespace WebShop.Repository
             }
             return query.FirstOrDefault();
         }
+
     }
 }

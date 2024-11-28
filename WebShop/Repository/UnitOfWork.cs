@@ -11,9 +11,10 @@ namespace WebShop.Repository
         public IProductCategoryRepository ProductCategory {  get; private set; }
 
         public ISupplierRepository Supplier {  get; private set; }
-
+        public IShoppingCartRepository ShoppingCart { get; private set; }   
         
-
+        public IOrderHeaderRepository OrderHeader { get; private set; }
+        public IOrderDetailRepository OrderDetail { get; private set; } 
         public IUserRepository ApplicationUser {  get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
@@ -23,6 +24,9 @@ namespace WebShop.Repository
             ProductCategory = new ProductCategoryRepository(_context);
             Supplier = new SupplierRepository(_context);
             ApplicationUser = new UserRepository(_context);
+            ShoppingCart = new ShoppingCartRepository(_context);
+            OrderHeader = new OrderHeaderRepository(_context);
+            OrderDetail = new OrderDetailRepository(_context);
         }
 
         public void Save()
