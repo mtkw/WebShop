@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
+using WebShop.Utility;
 
 namespace WebShop.Areas.Customer.Controllers
 {
@@ -89,11 +91,16 @@ namespace WebShop.Areas.Customer.Controllers
                     };
                     productFromDB.Quantity -= 1;
                     _unitOfWork.ShoppingCart.Add(cart);
+
+
                     _unitOfWork.Product.Update(productFromDB);
                 }
             }
             TempData["success"] = "Cart updated successfully";
             _unitOfWork.Save();
+
+/*            HttpContext.Session.SetInt32(SD.SessionCart,
+    _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count);*/
 
             return RedirectToAction("Index", new { categoryId = productFromDB.ProductCategoryId });
 
