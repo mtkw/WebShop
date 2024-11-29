@@ -43,6 +43,14 @@ namespace WebShop
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
 
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(100);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             builder.Services.AddRazorPages(); // Konfiguracja Razor pages bez tego ¿adna strona stworzona dla Identity nie bêdzie dzia³aæ 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -64,6 +72,7 @@ namespace WebShop
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
             app.UseMiddleware<ProductCategoryMiddleware>(); // konfigfuracja Klasy Middleware // AUTHENTICATION AND AUTHORIZATION BEFORE MIDDLEWARE CLASS
             app.MapRazorPages(); // Druga czêœæ konfiguracji Razor Pages
             app.MapControllerRoute(
