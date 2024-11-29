@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model WebShop.Models.Views.OrderVM
+
+<h2>Order Details</h2>
+
+<h4>Products in this Order:</h4>
+@if (Model.OrderDetails != null && Model.OrderDetails.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Product Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@detail.Product.Name</td>
+                    <td>@detail.Count</td>
+                    <td>$@detail.Price * @detail.Count</td>
+                    <td><img src="img/@(detail.Product.Name).jpg" alt="@detail.Product.Name" width="100" height="100" /></td>
+                </tr>
+               
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No products found for this order.</p>
+}
+
+
+<a href="@Url.Action("Index", "Order", new { area = "Customer" })" class="btn btn-secondary">Back to Orders</a>
+

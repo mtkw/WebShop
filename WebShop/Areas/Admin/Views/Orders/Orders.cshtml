@@ -1,15 +1,20 @@
 ﻿@model WebShop.Models.Views.OrderVM
 
-<h2>Your Orders</h2>
+@{
+    ViewData["Title"] = "Order List";
+}
+
+<h2>All Orders</h2>
+
 <table id="orderTable" class="table table-striped">
     <thead>
         <tr>
             <th>Order ID</th>
+            <th>Customer Name</th>
             <th>Order Date</th>
             <th>Order Total</th>
-            <th>Order Status</th>
-            <th>Products</th>
-           
+            <th>Status</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -17,19 +22,17 @@
         {
             <tr>
                 <td>@order.Id</td>
+                <td>@order.User.Name</td>
                 <td>@order.OrderDate.ToString("MM/dd/yyyy")</td>
                 <td>$@order.OrderTotal</td>
                 <td>@order.OrderStatus</td>
-                
                 <td>
-                    <a asp-area="Customer" asp-controller="Order" asp-action="Details" asp-route-orderId="@order.Id"
-                        class="btn btn-primary">View</a>
+                    <a asp-area="Admin" asp-controller="Orders" asp-action="Details" asp-route-orderId="@order.Id" class="btn btn-primary">View Details</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -53,5 +56,3 @@
         });
     </script>
 }
-
-

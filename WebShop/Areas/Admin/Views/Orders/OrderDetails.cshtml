@@ -1,0 +1,75 @@
+﻿@model WebShop.Models.Views.OrderVM
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h2>Order Details</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Status</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.OrderHeader.Id</td>
+            <td>@Model.OrderHeader.OrderDate.ToString("MM/dd/yyyy")</td>
+            <td>@Model.OrderHeader.OrderStatus</td>
+            <td>$@Model.OrderHeader.OrderTotal</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h4>Customer Information:</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.OrderHeader.User.Name</td>
+            <td>@Model.OrderHeader.User.Email</td>
+            <td>@Model.OrderHeader.User.PhoneNumber</td>
+            <td>@Model.OrderHeader.User.StreetAddress, @Model.OrderHeader.User.City, @Model.OrderHeader.User.State, @Model.OrderHeader.User.PostalCode</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h4>Order Items:</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detail in Model.OrderDetails)
+        {
+            <tr>
+                <td>@detail.Product.Name</td>
+                <td>@detail.Count</td>
+                <td>$@detail.Price</td>
+                <td>$@detail.Count * @detail.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="btn btn-secondary">Back to Orders</a>
+
