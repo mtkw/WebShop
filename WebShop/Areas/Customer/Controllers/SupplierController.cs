@@ -23,50 +23,7 @@ namespace WebShop.Areas.Customer.Controllers
 
 
 
-        //public IActionResult Index(int? supplierId, int? categoryId)
-        //{
-        //    ProductCategory categories1 = _unitOfWork.ProductCategory.
-        //        GetFirstOrDefault(x => x.Id == (categoryId.HasValue ? categoryId.Value : 12));
-
-        //    IQueryable < Product > products;
-
-        //    if( categories1.Name == "All Products")
-        //    {
-        //         products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category");
-        //    }
-        //    else
-        //    {
-        //        products = _unitOfWork.Product.GetAll(includProperties: "Supplier,Category").
-        //            Where(x=>x.ProductCategoryId == categoryId);
-        //    }
-
-        //    var categories = _unitOfWork.ProductCategory.GetAll();
-
-
-
-        //    if (supplierId.HasValue)
-        //    {
-        //        products = products.Where(p => p.SupplierId == supplierId.Value);
-        //    }
-
-
-
-
-
-        //    var suppliers = _unitOfWork.Supplier.GetAll();
-
-        //    var viewModel = new ProductSupplierCategoryVM
-        //    {
-        //        Products = products,
-        //        Categories = categories,
-        //        Suppliers = suppliers,
-        //        SelectedCategory = categoryId,
-        //        SelectedSupplierId = supplierId
-        //    };
-
-        //    return View("~/Areas/Customer/Views/Suppliers/Index.cshtml", viewModel);
-
-        //}
+        
 
         public IActionResult Index(int? supplierId, int? categoryId)
         {

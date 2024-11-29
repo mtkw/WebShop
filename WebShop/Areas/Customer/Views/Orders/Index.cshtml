@@ -1,0 +1,37 @@
+﻿@model WebShop.Models.Views.OrderVM
+
+<h2>Your Orders</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Total</th>
+            <th>Order Status</th>
+            <th>Products</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.OrderDate.ToString("MM/dd/yyyy")</td>
+                <td>$@order.OrderTotal</td>
+                <td>@order.OrderStatus</td>
+                <td>
+                    @foreach (var detail in order.OrderDetails)
+                    {
+                        <p>@detail.Product.Name (Quantity: @detail.Count) - Price: $@detail.Price</p>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-primary">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

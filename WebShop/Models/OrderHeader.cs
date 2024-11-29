@@ -36,5 +36,7 @@ namespace WebShop.Models
         public string? State { get; set; }
         [Required]
         public string? PostalCode { get; set; }
+
+        public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
