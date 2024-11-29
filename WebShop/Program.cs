@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using WebShop.Middleware;
 using WebShop.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Stripe;
 
 namespace WebShop
 {
@@ -23,6 +24,9 @@ namespace WebShop
             { options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnecion")).
                 EnableSensitiveDataLogging();
             }); 
+
+            //Konfiguracja p³atnoœci Stripe
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 
             //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>(); // Domyœlna konfiguracja tylko do rejesracji i logowania u¿ytkowników bez podzia³u na role
@@ -56,6 +60,7 @@ namespace WebShop
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
