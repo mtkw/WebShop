@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.BillingPortal;
+using Stripe.Checkout;
 using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
 using WebShop.Utility;
+using Session = Stripe.Checkout.Session;
+using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;
+using SessionService = Stripe.Checkout.SessionService;
 
 namespace WebShop.Areas.Customer.Controllers
 {
@@ -169,7 +174,7 @@ namespace WebShop.Areas.Customer.Controllers
 
             ShoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(ShoppingCartVM.Products.ToList());
 
-            ShoppingCartVM.OrderHeader.User = _unitOfWork.ApplicationUser.Get(x => x.Id == userId);
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(x => x.Id == userId);
 
             ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
             ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
@@ -195,9 +200,44 @@ namespace WebShop.Areas.Customer.Controllers
                 /*                _unitOfWork.Save();*/
             }
 
-            foreach (var product in ShoppingCartVM.Products)
+            if (!applicationUser.IsBlocked)
             {
-                _unitOfWork.ShoppingCart.Remove(product);
+                //it is customr Active Account
+                //stripe logic Configure from documentation
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+                var options = new SessionCreateOptions
+                {
+                    SuccessUrl = domain + $"customer/shoppingcart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+                    CancelUrl = domain + "customer/shoppingcart/index",
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                };
+
+                foreach (var item in ShoppingCartVM.Products)
+                {
+                    var sessionLineItem = new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            UnitAmount = (long)(item.Product.Price * 100), // $20.50 => 2050
+                            Currency = "usd",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = item.Product.Name
+                            }
+                        },
+                        Quantity = item.Count
+                    };
+                    options.LineItems.Add(sessionLineItem);
+                }
+
+
+                var service = new SessionService();
+                Session session = service.Create(options);
+                _unitOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                _unitOfWork.Save();
+                Response.Headers.Add("Location", session.Url);
+                return new StatusCodeResult(303);
             }
 
             _unitOfWork.Save();
@@ -207,6 +247,26 @@ namespace WebShop.Areas.Customer.Controllers
 
         public IActionResult OrderConfirmation(int id)
         {
+
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u=>u.Id == id, includProperties:"User");
+            if(orderHeader.PaymentStatus!= SD.PaymentStatusDelayedPayment)
+            {
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.SessionId);
+
+                if(session.PaymentStatus.ToLower() == "paid")
+                {
+                    _unitOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);
+                    _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    _unitOfWork.Save();
+                }
+            }
+            var shoppingCart = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId, includProperties: "Product");
+            foreach (var product in shoppingCart)
+            {
+                _unitOfWork.ShoppingCart.Remove(product);
+            }
+            _unitOfWork.Save();
             return View(id);
         }
 
