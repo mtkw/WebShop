@@ -69,6 +69,8 @@ namespace WebShop.Areas.Customer.Controllers
                     productFromDB.Quantity -= 1;
                     _unitOfWork.ShoppingCart.Update(cartFromDB);
                     _unitOfWork.Product.Update(productFromDB);
+                    TempData["success"] = "Cart updated successfully";
+                    _unitOfWork.Save();
                 }
             }
             else
@@ -91,18 +93,13 @@ namespace WebShop.Areas.Customer.Controllers
                     };
                     productFromDB.Quantity -= 1;
                     _unitOfWork.ShoppingCart.Add(cart);
-
-
                     _unitOfWork.Product.Update(productFromDB);
+                    TempData["success"] = "Cart updated successfully";
+                    _unitOfWork.Save();
                 }
             }
-            TempData["success"] = "Cart updated successfully";
-            _unitOfWork.Save();
 
-/*            HttpContext.Session.SetInt32(SD.SessionCart,
-    _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count);*/
-
-            return RedirectToAction("Index", new { categoryId = productFromDB.ProductCategoryId });
+            return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });
 
         }
 

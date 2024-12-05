@@ -29,9 +29,9 @@ namespace WebShop.Middleware
                 // You can now access claims
                 var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var userEmail = claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
-                var cart = await _unitOfWork.ShoppingCart.GetAllAsync(x=>x.ApplicationUserId == userId);
+                var cart = await _unitOfWork.ShoppingCart.GetAllAsync(x => x.ApplicationUserId == userId);
                 int cartItemCount = 0;
-                foreach (var cartItem in cart) 
+                foreach (var cartItem in cart)
                 {
                     cartItemCount += cartItem.Count;
                 }
