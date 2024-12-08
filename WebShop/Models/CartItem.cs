@@ -9,6 +9,10 @@ namespace WebShop.Models
     public class CartItem
     {
         public Guid Id { get; set; }
+        public int ShoppingCartId { get; set; }
+        [ForeignKey(nameof(ShoppingCartId))]
+        [ValidateNever]
+        public ShoppingCart ShoppingCart { get; set; }
         public string Name { get; set; }
         public double UnitPrice { get; set; }
         public string Currency { get; set; }

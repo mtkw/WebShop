@@ -50,6 +50,31 @@ namespace WebShop.Areas.Customer.Controllers
         [Authorize]
         public IActionResult AddToCart (int productId)
         {
+            //Newe Version
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId);
+            Product productFromDB = _unitOfWork.Product.Get(u => u.Id == productId);
+
+            if (cartFromDB != null) 
+            {
+                if (productFromDB.Quantity == 0)
+                {
+                    TempData["errorr"] = "Product Sold Out. We will inform you when the product is available again.";
+                }
+                else
+                {
+                    //shopping cart exist
+/*                    cartFromDB.Count += 1;
+                    productFromDB.Quantity -= 1;
+                    _unitOfWork.ShoppingCart.Update(cartFromDB);
+                    _unitOfWork.Product.Update(productFromDB);
+                    TempData["success"] = "Cart updated successfully";
+                    _unitOfWork.Save();*/
+                }
+            }
+
             /*var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -99,7 +124,7 @@ namespace WebShop.Areas.Customer.Controllers
                 }
             }*/
 
-/*            return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });*/
+            /*            return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });*/
             return View();  
         }
 

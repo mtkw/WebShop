@@ -17,7 +17,7 @@ namespace WebShop.Models
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
 
-        public List<CartItem> CartItems { get; set; }
+        public List<CartItem> CartItems { get; set; } = new List<CartItem>();
 
         [Column("Ammount")]
         [Required]
