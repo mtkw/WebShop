@@ -66,7 +66,17 @@ namespace WebShop.Areas.Customer.Controllers
                 else
                 {
                     //shopping cart exist
-                    /*CartItem tempCartItem = _unitOfWork.CartItem.*/
+                    List<CartItem> cartItems = _unitOfWork.CartItem.GetAll(x=>x.ShoppingCartId == cartFromDB.Id).ToList();
+                    var productFromCart = cartItems.Find(x=>x.ProductId == productId);
+
+                    if (productFromCart != null) 
+                    {
+                        productFromCart.Product.Quantity += 1;
+                    }
+                    else
+                    {
+
+                    }
 /*                    cartFromDB.Count += 1;
                     productFromDB.Quantity -= 1;
                     _unitOfWork.ShoppingCart.Update(cartFromDB);
