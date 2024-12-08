@@ -10,6 +10,7 @@ namespace WebShop.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.AlterColumn<string>(
                 name: "ImgPath",
                 table: "Products",

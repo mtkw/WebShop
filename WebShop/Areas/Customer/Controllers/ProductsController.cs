@@ -50,7 +50,7 @@ namespace WebShop.Areas.Customer.Controllers
         [Authorize]
         public IActionResult AddToCart (int productId)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            /*var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == productId);
@@ -84,8 +84,8 @@ namespace WebShop.Areas.Customer.Controllers
                     //add cart record
                     ShoppingCart cart = new()
                     {
-                        /*                    Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,*/ // ---> To był problem kolumna ID jest ustawiona jako Identity i jej wartość jest uzupełniania automatycznie
-                        Product = _unitOfWork.Product.Get(u => u.Id == productId /*includProperties: "Category,Supplier"*/),
+                        *//*                    Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,*//* // ---> To był problem kolumna ID jest ustawiona jako Identity i jej wartość jest uzupełniania automatycznie
+                        Product = _unitOfWork.Product.Get(u => u.Id == productId *//*includProperties: "Category,Supplier"*//*),
                         Count = 1,
                         ProductId = productId,
                         ApplicationUserId = userId,
@@ -97,10 +97,10 @@ namespace WebShop.Areas.Customer.Controllers
                     TempData["success"] = "Cart updated successfully";
                     _unitOfWork.Save();
                 }
-            }
+            }*/
 
-            return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });
-
+/*            return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });*/
+            return View();  
         }
 
         public IActionResult Details(int id) 

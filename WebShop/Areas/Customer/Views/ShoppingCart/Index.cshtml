@@ -19,19 +19,19 @@
             {
             <div class="row mt-4 shadow justify-content-center align-content-center">
                 <div class="col-3">
-                    <img class="card-img-top" src="~/img/@(product.Product.ImgPath)" alt="@product.Product.Name" style="height: 100px;">
+                    @* <img class="card-img-top" src="~/img/@(product.Product.ImgPath)" alt="@product.Product.Name" style="height: 100px;"> *@
                 </div>
                 <div class="col-2">
-                    @product.Product.Name
+                    @* @product.Product.Name *@
                 </div>
                 <div class="col-2">
-                    @product.Product.Price @product.Product.Currency
+                    @* @product.Product.Price @product.Product.Currency *@
                 </div>
                     <div class="col-1">
-                        @product.Count
+                        @* @product.Count *@
                     </div>
                     <div class="col-2">
-                        @(product.Count * product.Product.Price) @product.Product.Currency
+                        @* @(product.Count * product.Product.Price) @product.Product.Currency *@
                     </div>
                 <div class="col-1">
                         <a class="btn btn-outline-success" asp-area="Customer" asp-controller="ShoppingCart" asp-action="IncrementProductInCart" asp-route-cartId="@product.Id">+</a>

@@ -33,7 +33,7 @@ namespace WebShop.Middleware
                 int cartItemCount = 0;
                 foreach (var cartItem in cart)
                 {
-                    cartItemCount += cartItem.Count;
+                    //cartItemCount += cartItem.Count;
                 }
                 context.Items["CartItemCounter"] = cartItemCount;
 
