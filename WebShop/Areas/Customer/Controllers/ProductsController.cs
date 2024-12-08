@@ -66,6 +66,7 @@ namespace WebShop.Areas.Customer.Controllers
                 else
                 {
                     //shopping cart exist
+                    /*CartItem tempCartItem = _unitOfWork.CartItem.*/
 /*                    cartFromDB.Count += 1;
                     productFromDB.Quantity -= 1;
                     _unitOfWork.ShoppingCart.Update(cartFromDB);

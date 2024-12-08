@@ -13,24 +13,14 @@ namespace WebShop.Models
         [ForeignKey(nameof(ShoppingCartId))]
         [ValidateNever]
         public ShoppingCart ShoppingCart { get; set; }
-        public string Name { get; set; }
-        public double UnitPrice { get; set; }
-        public string Currency { get; set; }
-        public string Description { get; set; }
-        public string? ImgPath { get; set; }
-        public int ProductCategoryId { get; set; }
-        [ForeignKey(nameof(ProductCategoryId))]
+       
+        public int ProductId { get; set; }
+        [ForeignKey(nameof(ProductId))]
         [ValidateNever]
-        public ProductCategory Category { get; set; }
-        public int SupplierId { get; set; }
-        [ForeignKey(nameof(SupplierId))]
-        [ValidateNever]
-        public Supplier Supplier { get; set; }
-        public int Quantity { get; set; }
-        [Column("Ammount")]
+        public Product Product { get; set; }
         [Required]
         [Precision(18, 2)]
         [Range(0, 9999999999.99)]
-        public decimal ItemAmmount { get; set; }
+        public decimal TotalAmmount { get; set; }
     }
 }
