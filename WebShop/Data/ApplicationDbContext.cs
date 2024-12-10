@@ -31,6 +31,19 @@ namespace WebShop.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            //Konfiguracja relacji jeden do wielu
+            modelBuilder.Entity<ShoppingCart>()
+                .HasMany(e => e.CartItems)
+                .WithOne(e => e.ShoppingCart)
+                .HasForeignKey(e => e.ShoppingCartId)
+                .IsRequired();
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(e => e.ShoppingCart)
+                .WithMany(e => e.CartItems)
+                .HasForeignKey(e => e.ShoppingCartId)
+                .IsRequired();
+
             modelBuilder.Entity<ProductCategory>().HasData(
                 new ProductCategory { Id = 1, Name = "Tablets" },
                 new ProductCategory { Id = 2, Name = "Smartphone" },
