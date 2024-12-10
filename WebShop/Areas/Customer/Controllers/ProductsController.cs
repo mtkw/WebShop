@@ -48,7 +48,7 @@ namespace WebShop.Areas.Customer.Controllers
             return View(customVM);
         }
         [Authorize]
-        public IActionResult AddToCart (int productId)
+        public IActionResult AddToCart(int productId)
         {
             //Newe Version
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -57,7 +57,7 @@ namespace WebShop.Areas.Customer.Controllers
             ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId);
             Product productFromDB = _unitOfWork.Product.Get(u => u.Id == productId);
 
-            if (cartFromDB != null) 
+            if (cartFromDB != null)
             {
                 if (productFromDB.Quantity == 0)
                 {
@@ -67,46 +67,38 @@ namespace WebShop.Areas.Customer.Controllers
                 {
                     //shopping cart exist
                     List<CartItem> cartItems = _unitOfWork.CartItem.GetAll(x=>x.ShoppingCartId == cartFromDB.Id).ToList();
-                    var productFromCart = cartItems.Find(x=>x.ProductId == productId);
+                    var productFromCart = cartItems.Find(x => x.ProductId == productId);
 
-                    if (productFromCart != null) 
+                    if (productFromCart != null)
                     {
-                        productFromCart.Product.Quantity += 1;
+                        productFromCart.TotalQuantity += 1;
+                        productFromDB.Quantity -= 1;
+                        _unitOfWork.CartItem.Update(productFromCart);
+                        _unitOfWork.ShoppingCart.Update(cartFromDB);
+                        _unitOfWork.Product.Update(productFromDB);
+                        TempData["success"] = "Cart updated successfully";
+                        _unitOfWork.Save(); 
                     }
                     else
                     {
+                        CartItem cartItem = new CartItem();
+                        cartItem.ProductId = productId;
+                        cartItem.Product = productFromDB;
+                        productFromDB.Quantity -= 1;
+                        cartItem.ShoppingCart = cartFromDB;
+                        cartItem.ShoppingCartId = cartFromDB.Id;
+                        _unitOfWork.CartItem.Add(cartItem);
+
+                        
+                        cartFromDB.Ammount += 1;
+                        cartFromDB.CartItems.Add(cartItem);
+
+                        _unitOfWork.ShoppingCart.Update(cartFromDB);
+                        _unitOfWork.Product.Update(productFromDB);
+                        TempData["success"] = "Cart updated successfully";
+                        _unitOfWork.Save();
 
                     }
-/*                    cartFromDB.Count += 1;
-                    productFromDB.Quantity -= 1;
-                    _unitOfWork.ShoppingCart.Update(cartFromDB);
-                    _unitOfWork.Product.Update(productFromDB);
-                    TempData["success"] = "Cart updated successfully";
-                    _unitOfWork.Save();*/
-                }
-            }
-
-            /*var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == productId);
-            Product productFromDB = _unitOfWork.Product.Get(u=> u.Id == productId);
-
-            if (cartFromDB != null)
-            {
-                if(productFromDB.Quantity == 0)
-                {
-                    TempData["errorr"] = "Product Sold Out. We will inform you when the product is available again.";
-                }
-                else
-                {
-                    //shopping cart exist
-                    cartFromDB.Count += 1;
-                    productFromDB.Quantity -= 1;
-                    _unitOfWork.ShoppingCart.Update(cartFromDB);
-                    _unitOfWork.Product.Update(productFromDB);
-                    TempData["success"] = "Cart updated successfully";
-                    _unitOfWork.Save();
                 }
             }
             else
@@ -117,26 +109,32 @@ namespace WebShop.Areas.Customer.Controllers
                 }
                 else
                 {
-                    //add cart record
-                    ShoppingCart cart = new()
-                    {
-                        *//*                    Id = _unitOfWork.ShoppingCart.GetAll().Count() + 1,*//* // ---> To był problem kolumna ID jest ustawiona jako Identity i jej wartość jest uzupełniania automatycznie
-                        Product = _unitOfWork.Product.Get(u => u.Id == productId *//*includProperties: "Category,Supplier"*//*),
-                        Count = 1,
-                        ProductId = productId,
-                        ApplicationUserId = userId,
-
-                    };
-                    productFromDB.Quantity -= 1;
+                    ShoppingCart cart = new ShoppingCart();
+                    cart.CartItems = new List<CartItem>();
+                    cart.CartCountItems = 0;
+                    cart.ApplicationUserId = userId;
+                    cart.ApplicationUser = _unitOfWork.ApplicationUser.Get(x=>x.Id == userId);
                     _unitOfWork.ShoppingCart.Add(cart);
-                    _unitOfWork.Product.Update(productFromDB);
+                    _unitOfWork.Save();
+
+
+                    CartItem cartItem = new CartItem();
+                    cartItem.Product = productFromDB;
+                    cartItem.ProductId = productId;
+                    cartItem.TotalQuantity = 1;
+                    productFromDB.Quantity -= 1;
+                    cartItem.ShoppingCartId = cart.Id;
+                    cartItem.ShoppingCart = cart;
+                    _unitOfWork.CartItem.Add(cartItem);
+
+                    cart.CartItems.Add(cartItem);
+                    _unitOfWork.ShoppingCart.Update(cart);
+
                     TempData["success"] = "Cart updated successfully";
                     _unitOfWork.Save();
                 }
-            }*/
-
-            /*            return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });*/
-            return View();  
+            }
+            return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });
         }
 
         public IActionResult Details(int id) 
