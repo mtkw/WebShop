@@ -34,11 +34,11 @@
                         @product.TotalAmmount @product.Product.Currency
                     </div>
                 <div class="col-1">
-                        <a class="btn btn-outline-success" asp-area="Customer" asp-controller="ShoppingCart" asp-action="IncrementProductInCart" asp-route-cartId="@product.Id">+</a>
-                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="DecrementProductInCart" asp-route-cartId="@product.Id">-</a>
+                        <a class="btn btn-outline-success" asp-area="Customer" asp-controller="ShoppingCart" asp-action="IncrementProductInCart" asp-route-productId="@product.ProductId">+</a>
+                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="DecrementProductInCart" asp-route-productId="@product.ProductId">-</a>
                 </div>
                     <div class="col-1">
-                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="RemoveProductFromCart" asp-route-cartId="@product.Id">
+                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="RemoveProductFromCart" asp-route-productId="@product.ProductId">
                             <i class="bi bi-trash"></i>
                         </a>
                     </div>

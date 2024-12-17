@@ -37,7 +37,6 @@ namespace WebShop.Areas.Customer.Controllers
                             OrderHeader = new()
                         };*/
             ShoppingCartVM = new ShoppingCartVM();
-            //ShoppingCartVM.Products = _unitOfWork.ShoppingCart.GetAll(u=>u.ApplicationUserId == userId, includProperties: "Product");
             ShoppingCartVM.Products = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId, includProperties: "CartItems");
             foreach (var cartItem in ShoppingCartVM.Products.CartItems)
             {
@@ -56,85 +55,98 @@ namespace WebShop.Areas.Customer.Controllers
             return View(ShoppingCartVM);
         }
 
-        public IActionResult IncrementProductInCart(int cartId)
+        public IActionResult IncrementProductInCart(int productId)
         {
-/*            var cartFromDB = _unitOfWork.ShoppingCart.Get(u=>u.Id == cartId);
-            var productFromCart = _unitOfWork.Product.Get(u=>u.Id == cartFromDB.ProductId);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if(productFromCart.Quantity != 0)
+            var shopingCartFromDB = _unitOfWork.ShoppingCart.Get(x => x.ApplicationUserId == userId, includProperties: "CartItems");
+            var cartItemFromShoppingCart = shopingCartFromDB.CartItems.First(x => x.ProductId == productId);
+            var productFromDB = _unitOfWork.Product.Get(x => x.Id == productId);
+
+            if (productFromDB.Quantity != 0)
             {
-                cartFromDB.Count++;
-                _unitOfWork.ShoppingCart.Update(cartFromDB);
-                productFromCart.Quantity -= 1;
-                _unitOfWork.Product.Update(productFromCart);
+                cartItemFromShoppingCart.TotalQuantity += 1;
+                cartItemFromShoppingCart.TotalAmmount += (decimal)productFromDB.Price;
+
+                productFromDB.Quantity -= 1;
+
+                shopingCartFromDB.CartCountItems += 1;
+                shopingCartFromDB.Ammount += (decimal)productFromDB.Price;
+
+                _unitOfWork.CartItem.Update(cartItemFromShoppingCart);
+                _unitOfWork.Product.Update(productFromDB);
+                _unitOfWork.ShoppingCart.Update(shopingCartFromDB);
+
                 TempData["success"] = "Add Item To Cart";
             }
             else
             {
                 TempData["error"] = "Product sold out";
             }
-            _unitOfWork.Save();*/
-
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult RemoveProductFromCart(int cartId)
+        public IActionResult RemoveProductFromCart(int productId)
         {
-            /*var cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
-            var productFromCart = _unitOfWork.Product.Get(u => u.Id == cartFromDB.ProductId);
 
-            productFromCart.Quantity += cartFromDB.Count;
-            _unitOfWork.ShoppingCart.Remove(cartFromDB);
-            _unitOfWork.Product.Update(productFromCart);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var shopingCartFromDB = _unitOfWork.ShoppingCart.Get(x => x.ApplicationUserId == userId, includProperties: "CartItems");
+            var cartItemFromShoppingCart = shopingCartFromDB.CartItems.First(x => x.ProductId == productId);
+            var productFromDB = _unitOfWork.Product.Get(x => x.Id == productId);
+
+            productFromDB.Quantity += cartItemFromShoppingCart.TotalQuantity;
+            shopingCartFromDB.CartCountItems -= cartItemFromShoppingCart.TotalQuantity;
+            shopingCartFromDB.Ammount -= cartItemFromShoppingCart.TotalAmmount;
+            _unitOfWork.Product.Update(productFromDB);
+            _unitOfWork.ShoppingCart.Update(shopingCartFromDB);
+            _unitOfWork.CartItem.Remove(cartItemFromShoppingCart);
+
             TempData["success"] = "Item Removed From Cart";
-            _unitOfWork.Save();*/
+            _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult DecrementProductInCart(int cartId)
+        public IActionResult DecrementProductInCart(int productId)
         {
-           /* var cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
-            var productFromCart = _unitOfWork.Product.Get(u => u.Id == cartFromDB.ProductId);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if (cartFromDB.Count == 1)
+            var shopingCartFromDB = _unitOfWork.ShoppingCart.Get(x => x.ApplicationUserId == userId, includProperties: "CartItems");
+            var cartItemFromShoppingCart = shopingCartFromDB.CartItems.First(x => x.ProductId == productId);
+            var productFromDB = _unitOfWork.Product.Get(x => x.Id == productId);
+
+            if (cartItemFromShoppingCart.TotalQuantity == 1) 
             {
-                _unitOfWork.ShoppingCart.Remove(cartFromDB);
-                productFromCart.Quantity += 1;
-                _unitOfWork.Product.Update(productFromCart);
+                _unitOfWork.CartItem.Remove(cartItemFromShoppingCart);
+                shopingCartFromDB.CartCountItems -= 1;
+                shopingCartFromDB.Ammount -= (decimal)productFromDB.Price;
+                productFromDB.Quantity += 1;
+                _unitOfWork.Product.Update(productFromDB);
                 TempData["success"] = "Item Removed From Cart";
             }
             else
             {
-                cartFromDB.Count--;
-                _unitOfWork.ShoppingCart.Update(cartFromDB);
-                productFromCart.Quantity += 1;
-                _unitOfWork.Product.Update(productFromCart);
+                cartItemFromShoppingCart.TotalQuantity -= 1;
+                cartItemFromShoppingCart.TotalAmmount -= (decimal)productFromDB.Price;
+                _unitOfWork.CartItem.Update(cartItemFromShoppingCart);
+
+                shopingCartFromDB.CartCountItems -= 1;
+                shopingCartFromDB.Ammount -= (decimal)productFromDB.Price;
+                _unitOfWork.ShoppingCart.Update(shopingCartFromDB);
+
+                productFromDB.Quantity += 1;
+                _unitOfWork.Product.Update(productFromDB);
                 TempData["success"] = "One item has been removed from the cart";
             }
-            _unitOfWork.Save();*/
+
+            _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private int CalculateCountOfProducts(List<ShoppingCart> cart) 
-        { 
-            var count = 0;
-           /* foreach (var cartItem in cart) 
-            {
-                count += cartItem.Count;
-            }*/
-            return count;
-        }
-
-        private double CalculateCartTotalPrice(List<ShoppingCart> cart) 
-        {
-            double totalPrice = 0;
-           /* foreach (var cartItem in cart)
-            {
-                totalPrice += (cartItem.Count * cartItem.Product.Price);
-            }*/
-            return totalPrice;
         }
         
         public IActionResult Summary()
