@@ -25,7 +25,5 @@ namespace WebShop.Repository
                 _context.Entry(existingEntity).CurrentValues.SetValues(shoppingCart);
             }
         }
-
-        
     }
 }

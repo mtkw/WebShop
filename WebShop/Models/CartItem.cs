@@ -11,7 +11,6 @@ namespace WebShop.Models
         public Guid Id { get; set; }
         public int ShoppingCartId { get; set; }
         [ForeignKey(nameof(ShoppingCartId))]
-        [ValidateNever]
         public ShoppingCart ShoppingCart { get; set; }
        
         public int ProductId { get; set; }

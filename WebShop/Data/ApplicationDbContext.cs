@@ -38,11 +38,11 @@ namespace WebShop.Data
                 .HasForeignKey(e => e.ShoppingCartId)
                 .IsRequired();
 
-            modelBuilder.Entity<CartItem>()
+/*            modelBuilder.Entity<CartItem>()
                 .HasOne(e => e.ShoppingCart)
                 .WithMany(e => e.CartItems)
                 .HasForeignKey(e => e.ShoppingCartId)
-                .IsRequired();
+                .IsRequired();*/
 
             modelBuilder.Entity<ProductCategory>().HasData(
                 new ProductCategory { Id = 1, Name = "Tablets" },
