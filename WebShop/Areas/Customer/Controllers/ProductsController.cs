@@ -72,7 +72,10 @@ namespace WebShop.Areas.Customer.Controllers
                     if (productFromCart != null)
                     {
                         productFromCart.TotalQuantity += 1;
+                        productFromCart.TotalAmmount += (decimal)productFromDB.Price;
                         productFromDB.Quantity -= 1;
+                        cartFromDB.Ammount += (decimal)productFromDB.Price;
+                        cartFromDB.CartCountItems += 1;
                         _unitOfWork.CartItem.Update(productFromCart);
                         _unitOfWork.ShoppingCart.Update(cartFromDB);
                         _unitOfWork.Product.Update(productFromDB);
@@ -87,10 +90,13 @@ namespace WebShop.Areas.Customer.Controllers
                         productFromDB.Quantity -= 1;
                         cartItem.ShoppingCart = cartFromDB;
                         cartItem.ShoppingCartId = cartFromDB.Id;
+                        cartItem.TotalQuantity = 1;
+                        cartItem.TotalAmmount = (decimal)productFromDB.Price;
                         _unitOfWork.CartItem.Add(cartItem);
 
                         
-                        cartFromDB.Ammount += 1;
+                        cartFromDB.Ammount += (decimal)productFromDB.Price;
+                        cartFromDB.CartCountItems += 1;
                         cartFromDB.CartItems.Add(cartItem);
 
                         _unitOfWork.ShoppingCart.Update(cartFromDB);
@@ -122,12 +128,14 @@ namespace WebShop.Areas.Customer.Controllers
                     cartItem.Product = productFromDB;
                     cartItem.ProductId = productId;
                     cartItem.TotalQuantity = 1;
+                    cartItem.TotalAmmount = (decimal)productFromDB.Price * cartItem.TotalQuantity;
                     productFromDB.Quantity -= 1;
                     cartItem.ShoppingCartId = cart.Id;
                     cartItem.ShoppingCart = cart;
                     _unitOfWork.CartItem.Add(cartItem);
 
-                    cart.CartItems.Add(cartItem);
+                    cart.CartCountItems += 1;
+                    cart.Ammount += ((decimal)cartItem.Product.Price * cartItem.TotalQuantity);
                     _unitOfWork.ShoppingCart.Update(cart);
 
                     TempData["success"] = "Cart updated successfully";

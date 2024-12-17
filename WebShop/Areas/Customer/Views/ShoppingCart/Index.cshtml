@@ -31,7 +31,6 @@
                         @product.TotalQuantity
                     </div>
                     <div class="col-2">
-                        @* @(product.Count * product.Product.Price) @product.Product.Currency *@
                         @product.TotalAmmount @product.Product.Currency
                     </div>
                 <div class="col-1">
@@ -45,11 +44,11 @@
                     </div>
             </div>  
             }
-            @if(Model.TotalCountOfProducts > 0)
+            @if(Model.Products.CartCountItems > 0)
             {
                 <div class="card-footer mt-3">
-                    <strong>TOTAL PRICE:</strong> @Model.OrderHeader.OrderTotal.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
-                    <strong>Total Quantity:</strong> @Model.TotalCountOfProducts
+                    <strong>TOTAL PRICE:</strong> @Model.Products.Ammount.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
+                    <strong>Total Quantity:</strong> @Model.Products.CartCountItems
                 </div>
                 <div class="row justify-content-center">
                     <a class="btn btn-outline-primary col-2" asp-asp-area="Customer" asp-controller="ShoppingCart" asp-action="Summary">Summary</a>
