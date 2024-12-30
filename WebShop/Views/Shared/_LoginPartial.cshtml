@@ -38,13 +38,10 @@ else
     <li class="nav-item">
         <a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
-@*     <li class="nav-item">
-        <a class="nav-link text-light" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li> *@
     <li class="nav-item">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Launch demo modal
+                Login
             </button>
 
             <!-- Modal -->
@@ -52,7 +49,7 @@ else
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Login Form</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -82,13 +79,13 @@ else
                                     </div>
                                     <div>
                                         <p>
-                                            @* <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a> *@
+                                            <a id="forgot-password" asp-area="Identity" asp-page="/Account/ForgotPassword">Forgot your password?</a>
                                         </p>
                                         <p>
-                                            @* <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a> *@
+                                            <a asp-area="Identity" asp-page="/Account/Register">Register as a new user</a>
                                         </p>
                                         <p>
-                                            @* <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a> *@
+                                            <a id="resend-confirmation" asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">Resend email confirmation</a>
                                         </p>
                                     </div>
                                 </form>
