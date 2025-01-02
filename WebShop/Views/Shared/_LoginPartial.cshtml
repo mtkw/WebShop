@@ -8,6 +8,7 @@
 
 @{
     var CartItemCounter = Context.Items["CartItemCounter"];
+    
 }
 
 <ul class="navbar-nav">
@@ -38,14 +39,14 @@ else
     <li class="nav-item">
         <a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
-    <li class="nav-item">
+        <li class="nav-item">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Login
             </button>
 
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-save="modal">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -57,11 +58,16 @@ else
                                 <form id="account" method="post" asp-area="Identity" asp-page="/Account/Login">
                                     <h2>Use a local account to log in.</h2>
                                     <hr />
+                                    @if (!string.IsNullOrEmpty(Model.ErrorMsg))
+                                    {
+                                        <span>@Model.ErrorMsg</span>
+                                    }
                                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                                     <div class="form-floating mb-3">
                                         <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                                         <label asp-for="Email" class="form-label">Email</label>
                                         <span asp-validation-for="Email" class="text-danger"></span>
+                                        <div>@Html.ValidationMessageFor(m => m.Email)</div>
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input type="password" asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
@@ -101,3 +107,6 @@ else
 
 }
 </ul>
+@section Scripts {
+     <partial name="_ValidationScriptsPartial" /> 
+}

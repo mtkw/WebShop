@@ -2,6 +2,7 @@
 
 @{
     var categories = Context.Items["CategoryList"] as List<ProductCategory>;
+    var errorMessage = TempData["Error"] as string;
 }
 
 <!DOCTYPE html>
@@ -98,7 +99,7 @@
                         </div>
                     </form>
                     @* <partial name="_LoginPartial"/> *@
-                    @await Html.PartialAsync("_LoginPartial", new LoginViewModel())
+                    @await Html.PartialAsync("_LoginPartial", new LoginViewModel { ErrorMsg = errorMessage });
                 </div>
             </div>
         </nav>
