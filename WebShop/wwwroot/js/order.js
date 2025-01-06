@@ -13,7 +13,7 @@ function loadDataTable() {
             { data: 'id', "width": "10%" },
             { data: 'orderDate', "width": "10%" },
             { data: 'shippingDate', "width": "5%" },
-            { data: 'orderTotal', "width": "30%" },
+            { data: 'orderTotal', "width": "20%" },
             { data: 'orderStatus', "width": "10%" },
             { data: 'paymentStatus', "width": "10%" },
             { data: 'paymentDate', "width": "5%" },
@@ -22,16 +22,16 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
                         <div class="w-75 btn-group" role="group" >
-                            <a onClick=Delete('/customer/order/delete?id=${data}') class="btn btn-outline-danger mx-2" >
-                            <i class="bi bi-trash-fill"></i> Delete
+                            <a onClick=Delete('/customer/order/cancel?id=${data}') class="btn btn-outline-danger mx-2" >
+                            <i class="bi bi-trash-fill"></i> Cancel Order
                             </a >
-                            <a href="/customer/order/upsert?id=${data}" class="btn btn-outline-success mx-2">
-                               <i class="bi bi-pencil-square"></i> Edit
+                            <a href="/customer/order/details?id=${data}" class="btn btn-outline-success mx-2">
+                               <i class="bi bi-pencil-square"></i> Show Details
                             </a>
                         </div>
                     `
                 },
-                "width": "5%"
+                "width": "20%"
             }
         ]
     });
@@ -45,12 +45,12 @@ function Delete(url) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, Cancel Order!'
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
                 url: url,
-                type: 'DELETE',
+                type: 'PATCH',
                 success: function (data) {
                     dataTable.ajax.reload();
                     toastr.success(data.message);

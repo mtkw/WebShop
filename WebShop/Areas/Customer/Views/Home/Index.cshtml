@@ -29,7 +29,7 @@
                         <div class="carousel-item @(product.Id == 1 ? "active" : "")">
 
                             <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                                <img src="img/@(product.Name).jpg" class="d-block carousel-image" alt="@product.Name" />
+                                <img src="~/img/@(product.Name).jpg" class="d-block carousel-image" alt="@product.Name" />
                             </a>
                             <!-- Carousel Caption -->
                             <div class="carousel-caption d-block" style="background: rgba(0, 0, 0, 0.3); padding: 5px 8px; border-radius: 4px;">

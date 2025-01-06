@@ -2,7 +2,7 @@
 {
     public class OrderViewModel
     {
-        public List<OrderHeader> OrdersHeader { get; set; }
-
+        public List<OrderHeader> orderHeader { get; set; } = new List<OrderHeader>();
+        public List<OrderDetail> orderDetail { get; set; } = new List<OrderDetail>();
     }
 }
