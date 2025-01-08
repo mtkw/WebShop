@@ -59,7 +59,7 @@ namespace WebShop.Areas.Customer.Controllers
             return View(orderDetailsViewModel);
         }
         [HttpPatch]
-        public IActionResult Cancel(int id)
+        public IActionResult Cancel(int id) //Temat do przemyślenia po usunięciu zamówienia powinny wracać produkty do magazynu, Przemyśleć temat opcji ponownego złożenia zamówienia
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
