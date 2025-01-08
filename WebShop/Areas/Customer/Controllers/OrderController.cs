@@ -70,8 +70,7 @@ namespace WebShop.Areas.Customer.Controllers
             {
                 return Json(new { success = false, message = "Problem with order cancellation" });
             }
-
-            if (!string.IsNullOrEmpty(orderToCanceled.TrackingNumber)) 
+            if (!string.IsNullOrEmpty(orderToCanceled.TrackingNumber))
             {
                 return Json(new { success = false, message = "You cannot cancel the order because the order has already been shipped." });
             }
@@ -81,6 +80,30 @@ namespace WebShop.Areas.Customer.Controllers
             _unitOfWork.Save();
 
             return Json(new { success = true, message = "Order Canceled" });
+        }
+
+        public IActionResult CancelFromDetailsPage(int id)
+        {
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var orderToCanceled = _unitOfWork.OrderHeader.Get(u => (u.ApplicationUserId == userId && u.Id == id));
+
+            if (orderToCanceled == null)
+            {
+                return RedirectToAction(nameof(Details),new { success = false, message = "Problem with order cancellation" });
+            }
+            if (!string.IsNullOrEmpty(orderToCanceled.TrackingNumber))
+            {
+                return RedirectToAction(nameof(Details), new { id = id, success = false, message = "You cannot cancel the order because the order has already been shipped." });
+            }
+
+            orderToCanceled.OrderStatus = SD.StatusCancelled;
+            _unitOfWork.OrderHeader.Update(orderToCanceled);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Details), new {id = id, success = true, message = "Order Canceled" });
         }
     }
 }
