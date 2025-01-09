@@ -18,14 +18,20 @@ function loadDataTable() {
             { data: 'paymentStatus', "width": "10%" },
             { data: 'paymentDate', "width": "5%" },
             {
-                data: 'id',
-                "render": function (data) {
-                    return `
-                        <div class="w-75 btn-group" role="group" >
-                            <a onClick=Delete('/customer/order/cancel?id=${data}') class="btn btn-outline-danger mx-2" >
+                data: 'orderStatus',
+                "render": function (orderStatus,type, row) {
+                    let cancelButton = '';
+                    if (orderStatus != "Cancelled") {
+                        cancelButton = `
+                        <a onClick=Delete('/customer/order/cancel?id=${row.id}') class="btn btn-outline-danger mx-2" >
                             <i class="bi bi-trash-fill"></i> Cancel Order
                             </a >
-                            <a href="/customer/order/details?id=${data}" class="btn btn-outline-success mx-2">
+                        `;
+                    }
+                    return `
+                        <div class="w-75 btn-group" role="group" >
+                            ${cancelButton}
+                            <a href="/customer/order/details?id=${row.id}" class="btn btn-outline-success mx-2">
                                <i class="bi bi-pencil-square"></i> Show Details
                             </a>
                         </div>

@@ -1,6 +1,6 @@
 ﻿@model OrderViewModel
 
-@if (string.IsNullOrEmpty(Model.orderHeader.FirstOrDefault().TrackingNumber)) 
+@if (string.IsNullOrEmpty(Model.orderHeader.FirstOrDefault().TrackingNumber) && Model.orderHeader.FirstOrDefault().OrderStatus != SD.StatusCancelled) 
 {
     <a asp-controller="Order" asp-action="CancelFromDetailsPage" asp-route-id="@Model.orderHeader.FirstOrDefault().Id" class="btn btn-danger">Cancel Order</a>
     <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="You can cancel an order that has not been shipped yet. If you want to cancel the purchase of goods that have been sent to you, please complete the return form and return it together with the product to the address of our warehouse.">

@@ -68,17 +68,24 @@ namespace WebShop.Areas.Customer.Controllers
 
             if (orderToCanceled == null)
             {
+                
                 return Json(new { success = false, message = "Problem with order cancellation" });
             }
             if (!string.IsNullOrEmpty(orderToCanceled.TrackingNumber))
             {
+                
                 return Json(new { success = false, message = "You cannot cancel the order because the order has already been shipped." });
+            }
+            if(orderToCanceled.OrderStatus == SD.StatusCancelled)
+            {
+                return Json(new { success = false, message = "Order already canceled" });
             }
 
             orderToCanceled.OrderStatus = SD.StatusCancelled;
             _unitOfWork.OrderHeader.Update(orderToCanceled);
             _unitOfWork.Save();
 
+            
             return Json(new { success = true, message = "Order Canceled" });
         }
 
@@ -92,18 +99,26 @@ namespace WebShop.Areas.Customer.Controllers
 
             if (orderToCanceled == null)
             {
-                return RedirectToAction(nameof(Details),new { success = false, message = "Problem with order cancellation" });
+                TempData["error"] = "Problem with order cancellation";
+                return RedirectToAction(nameof(Details));
             }
             if (!string.IsNullOrEmpty(orderToCanceled.TrackingNumber))
             {
-                return RedirectToAction(nameof(Details), new { id = id, success = false, message = "You cannot cancel the order because the order has already been shipped." });
+                TempData["error"] = "You cannot cancel the order because the order has already been shipped.";
+                return RedirectToAction(nameof(Details), new { id = id});
+            }
+            if (orderToCanceled.OrderStatus == SD.StatusCancelled)
+            {
+                TempData["error"] = "Order already canceled";
+                return RedirectToAction(nameof(Details), new { id = id });
             }
 
             orderToCanceled.OrderStatus = SD.StatusCancelled;
             _unitOfWork.OrderHeader.Update(orderToCanceled);
             _unitOfWork.Save();
 
-            return RedirectToAction(nameof(Details), new {id = id, success = true, message = "Order Canceled" });
+            TempData["success"] = "Order Canceled";
+            return RedirectToAction(nameof(Details), new {id = id });
         }
     }
 }
