@@ -252,6 +252,36 @@ body {
     font-style: italic;
 }
 
+.disabled {
+    color: gray; /* Change text color to indicate it's disabled */
+    pointer-events: none; /* Disable click events */
+    text-decoration: none; /* Remove underline */
+    cursor: default; /* Change cursor to default */
+    position: relative; /* Position for tooltip */
+}
+
+.tooltip {
+    visibility: hidden; /* Hidden by default */
+    background-color: grey; /* Tooltip background */
+    color: #fff; /* Tooltip text color */
+    text-align: center; /* Center text */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px; /* Padding */
+    position: absolute; /* Positioning */
+    z-index: 1; /* Ensure it appears above other elements */
+    bottom: 125%; /* Position above the link */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center adjustment */
+    opacity: 0; /* Start invisible */
+    transition: opacity 0.3s; /* Fade effect */
+}
+
+
+.btn-group:hover .tooltip {
+    visibility: visible; /* Show tooltip on hover */
+    opacity: 1; /* Fade in */
+}
+
 
 
 

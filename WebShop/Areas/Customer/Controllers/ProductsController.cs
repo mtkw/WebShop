@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.Climate;
 using System.Security.Claims;
 using WebShop.Models;
 using WebShop.Models.Views;
 using WebShop.Repository.IRepository;
 using WebShop.Utility;
+using Product = WebShop.Models.Product;
 
 namespace WebShop.Areas.Customer.Controllers
 {
@@ -48,7 +50,7 @@ namespace WebShop.Areas.Customer.Controllers
             return View(customVM);
         }
         [Authorize]
-        public IActionResult AddToCart(int productId)
+        public IActionResult AddToCart(int productId, int? orderId, bool? productDetailsPage)
         {
             //Newe Version
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -142,6 +144,15 @@ namespace WebShop.Areas.Customer.Controllers
                     _unitOfWork.Save();
                 }
             }
+            if(orderId != null)
+            {
+                return RedirectToAction("Details", "Order", new {id = orderId});
+            }
+            if(productDetailsPage == true)
+            {
+                return RedirectToAction("Details", "Products", new { id = productId });
+            }
+
             return RedirectToAction(nameof(Index), new { categoryId = productFromDB.ProductCategoryId });
         }
 

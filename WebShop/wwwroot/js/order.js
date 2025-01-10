@@ -27,6 +27,13 @@ function loadDataTable() {
                             <i class="bi bi-trash-fill"></i> Cancel Order
                             </a >
                         `;
+                    } else {
+                        cancelButton = `
+                        <a onClick=Delete('/customer/order/cancel?id=${row.id}') class="btn btn-outline-danger mx-2 disabled" >
+                         <span class="tooltip">The order has already been canceled.</span>
+                            <i class="bi bi-trash-fill"></i> Cancel Order
+                            </a >
+                        `;
                     }
                     return `
                         <div class="w-75 btn-group" role="group" >
