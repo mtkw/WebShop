@@ -72,7 +72,7 @@
 //// start the animation loop
 //tick();
 
-const circleElement = document.querySelector('.circle');
+/*const circleElement = document.querySelector('.circle');
 
 circleElement.innerHTML = `<div class="text-line">Customer</div>
     <div class="text-line">Help</div>`;
@@ -120,4 +120,4 @@ const tick = () => {
 
 // Start the animation loop
 tick();
-
+*/

@@ -51,7 +51,10 @@
                         <td>@orderDetail.Product.Price @orderDetail.Product.Currency</td>
                         <td>@orderDetail.Count</td>
                         <td>@(orderDetail.Count * orderDetail.Price) @orderDetail.Product.Currency</td>
-                        <td><a class="btn btn-success" asp-controller="Products" asp-action="AddToCart" asp-route-productId="@orderDetail.ProductId" asp-route-orderId="@orderDetail.OrderHeader.Id">Order Again</a></td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-center"><a class="btn btn-success" asp-controller="Products" asp-action="AddToCart" asp-route-productId="@orderDetail.ProductId" asp-route-orderId="@orderDetail.OrderHeader.Id">Order Again</a></td>
                     </tr>
                 }
             </tbody>
