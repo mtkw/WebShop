@@ -277,7 +277,7 @@ body {
 }
 
 
-.btn-group:hover .tooltip {
+.btn-group > a:hover .tooltip {
     visibility: visible; /* Show tooltip on hover */
     opacity: 1; /* Fade in */
 }
