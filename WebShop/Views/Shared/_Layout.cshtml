@@ -26,14 +26,14 @@
 @*     <div id="circle" class="circle"></div> *@
     
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebShop</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -45,59 +45,52 @@
                         </li>
                         @if (User.IsInRole(Roles.Role_Admin))
                         {
-                            <div class="collapse navbar-collapse" id="navbarNavDarkDropdownAdmin">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item dropdown">
-                                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <li class="nav-item dropdown mb-md-2">
+                                <button class="btn btn-dark dropdown-toggle p-0 p-lg-2" data-bs-toggle="dropdown" aria-expanded="false">
                                             Admin Panel
                                         </button>
                                         <span class="hover-bar"></span>
-                                        <ul class="dropdown-menu dropdown-menu-dark">
+                                <ul class="dropdown-menu dropdown-menu-dark">
                                             <li><a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Products</a></li>
                                             <li><a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Products Categories</a></li>
                                             <li><a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">Users</a></li>
                                             <li><a class="dropdown-item" href="#">Orders</a></li>
                                         </ul>
                                     </li>
-                                </ul>
-                            </div>
                         }
                         @if (User.IsInRole(Roles.Role_User))
                         {
-                            <div class="collapse navbar-collapse" id="navbarNavDarkDropdownUser">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item dropdown">
-                                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <li class="nav-item dropdown mb-md-2">
+                                        <button class="btn btn-dark dropdown-toggle p-0 p-lg-2" data-bs-toggle="dropdown" aria-expanded="false">
                                             User Panel
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item" asp-controller="Order" asp-action="Index">My Orders</a></li>
+                                            <li class="nav-item"><a class="dropdown-item" asp-controller="Order" asp-action="Index">My Orders</a></li>
                                         </ul>
                                     </li>
-                                </ul>
-                            </div>
                         } 
                     </ul>
-                    <form asp-controller="Products" asp-action="Search" method="get" class="d-flex">
-                        <div class="col-4 m-0 p-0">
-                            <input type="text" class="form-control" name="serachString" aria-describedby="emailHelp">
-                        </div>
-                        <div class="col-4 m-0 p-0">
-                            @if(categories != null)
-                            {
-                                <select class="form-select" aria-label="Categories" name="categoryOption">
-                                    <option selected value="0">All Categories</option>
-                                    @foreach (var category in categories)
-                                    {
-                                        <option value="@category.Id">@category.Name</option>
-                                    }
-                                </select>
-                            }
-                        </div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary" style="margin-left: .5rem">Search</button>
-                        </div>
-                    </form>
+                        <form asp-controller="Products" asp-action="Search" method="get" class="d-lg-flex">
+                            <div class="col-4 mb-md-1 me-lg-1">
+                                <input type="text" class="form-control" name="serachString" aria-describedby="emailHelp">
+                            </div>
+                            <div class="col-4 m-0 p-0">
+                                @if (categories != null)
+                                {
+                                    <select class="form-select" aria-label="Categories" name="categoryOption">
+                                        <option selected value="0">All Categories</option>
+                                        @foreach (var category in categories)
+                                        {
+                                            <option value="@category.Id">@category.Name</option>
+                                        }
+                                    </select>
+                                }
+                            </div>
+                        <div class="col-4 mt-lg-0 mt-md-2 ms-lg-1">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                    
                     @* <partial name="_LoginPartial"/> *@
                     @await Html.PartialAsync("_LoginPartial", new LoginViewModel { ErrorMsg = errorMessage });
                 </div>
