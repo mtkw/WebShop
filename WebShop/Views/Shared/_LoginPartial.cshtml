@@ -16,10 +16,13 @@
 {
         @if (!User.IsInRole(Roles.Role_Admin))
         {
-            <li class="nav-item">
+            <li class="nav-item" id="cart-icon">
                 <a class="nav-link" id="cart-icon" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
-                    <i class="bi bi-cart"></i> 
-                    <div class="cart-counter">@CartItemCounter
+                    <div class="position-relative">
+                        <i class="bi bi-cart"></i>
+                        <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
+                            @CartItemCounter
+                        </div>
                     </div>
                 </a>
             </li>
