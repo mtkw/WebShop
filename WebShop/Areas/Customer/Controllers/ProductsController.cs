@@ -146,7 +146,7 @@ namespace WebShop.Areas.Customer.Controllers
             }
             if(orderId != null)
             {
-                return RedirectToAction("Details", "Order", new {id = orderId});
+                return RedirectToAction("Index", "ShoppingCart");
             }
             if(productDetailsPage == true)
             {

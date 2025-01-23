@@ -9,6 +9,7 @@ function loadDataTable() {
             url: '/admin/user/getall',
             dataSrc: 'data'
         },
+        scrollX: true,
         "columns": [
             { data: 'id', "width": "20%" },
             { data: 'name', "width": "20%" },

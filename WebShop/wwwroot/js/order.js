@@ -9,6 +9,8 @@ function loadDataTable() {
         "ajax": {
             url: '/customer/order/getall'
         },
+        scrollX: true,
+        screenY: true,
         "columns": [
             { data: 'id', "width": "10%" },
             { data: 'orderDate', "width": "10%" },
