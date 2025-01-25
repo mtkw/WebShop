@@ -18,7 +18,7 @@ function loadDataTable() {
             {
                 data: 'imgPath',
                 "render": function (data) {
-                    return `<img class="card-img-top" src="/img/${data}" alt="${data}" style="height: 100px;"/>`
+                    return `<img class="card-img-top" src="/img/${data}.jpg" alt="${data}" style="height: 100px;"/>`
                 },
                 "width": "10%"
             },
