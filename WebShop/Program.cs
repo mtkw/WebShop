@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess.Data;
-using WebShop.Repository;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository;
+using WebShop.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using WebShop.Middleware;
 using WebShop.Utility;

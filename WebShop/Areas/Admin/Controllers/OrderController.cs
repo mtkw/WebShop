@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebShop.Models.Models;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 
 namespace WebShop.Areas.Admin.Controllers
 {

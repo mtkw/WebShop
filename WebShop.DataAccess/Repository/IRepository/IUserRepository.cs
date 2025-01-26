@@ -1,6 +1,6 @@
 ﻿using WebShop.Models.Models;
 
-namespace WebShop.Repository.IRepository
+namespace WebShop.DataAccess.Repository.IRepository
 {
     public interface IUserRepository : IRepository<ApplicationUser>
     {

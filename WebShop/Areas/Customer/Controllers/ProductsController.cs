@@ -5,7 +5,7 @@ using Stripe.Climate;
 using System.Security.Claims;
 using WebShop.Models.Models;
 using WebShop.Models.Models.Views;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 using WebShop.Utility;
 using Product = WebShop.Models.Models.Product;
 

@@ -1,8 +1,8 @@
 ﻿using WebShop.DataAccess.Data;
 using WebShop.Models.Models;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 
-namespace WebShop.Repository
+namespace WebShop.DataAccess.Repository
 {
     public class SupplierRepository : Repository<Supplier>, ISupplierRepository
     {

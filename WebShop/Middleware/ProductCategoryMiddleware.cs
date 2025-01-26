@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 
 namespace WebShop.Middleware
 {

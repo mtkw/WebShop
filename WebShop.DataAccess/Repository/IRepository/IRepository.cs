@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using WebShop.Models.Models;
 
-namespace WebShop.Repository.IRepository
+namespace WebShop.DataAccess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {

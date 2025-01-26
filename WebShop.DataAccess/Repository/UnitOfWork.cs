@@ -1,7 +1,7 @@
 ﻿using WebShop.DataAccess.Data;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 
-namespace WebShop.Repository
+namespace WebShop.DataAccess.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {

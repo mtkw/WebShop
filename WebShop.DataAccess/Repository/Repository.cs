@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WebShop.DataAccess.Data;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 
-namespace WebShop.Repository
+namespace WebShop.DataAccess.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {

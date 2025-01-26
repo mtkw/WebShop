@@ -1,4 +1,4 @@
-﻿namespace WebShop.Repository.IRepository
+﻿namespace WebShop.DataAccess.Repository.IRepository
 {
     public interface IUnitOfWork
     {

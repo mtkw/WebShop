@@ -5,7 +5,7 @@ using Stripe.Checkout;
 using System.Security.Claims;
 using WebShop.Models.Models;
 using WebShop.Models.Models.Views;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 using WebShop.Utility;
 using Session = Stripe.Checkout.Session;
 using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;

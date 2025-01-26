@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebShop.Models.Models;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess.Data;
 
-namespace WebShop.Repository
+namespace WebShop.DataAccess.Repository
 {
     public class UserRepository : Repository<ApplicationUser>, IUserRepository
     {

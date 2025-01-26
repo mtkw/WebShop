@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebShop.Models.Models;
 using WebShop.Models.Models.Views;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 
 namespace WebShop.Areas.Customer.Controllers
 {
