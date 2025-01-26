@@ -275,8 +275,8 @@ body {
     padding: 5px; /* Padding */
     position: absolute; /* Positioning */
     z-index: 1; /* Ensure it appears above other elements */
-    bottom: 125%; /* Position above the link */
-    left: 50%; /* Center horizontally */
+    bottom: 0%; /* Position above the link */
+    left: -75%; /* Center horizontally */
     transform: translateX(-50%); /* Center adjustment */
     opacity: 0; /* Start invisible */
     transition: opacity 0.3s; /* Fade effect */

@@ -13,6 +13,7 @@ function loadDataTable() {
         screenY: true,
         "columns": [
             { data: 'id', "width": "10%" },
+            { data: 'user.id', "width": "10%" },
             { data: 'user.email', "width": "10%" },
             { data: 'orderDate', "width": "10%" },
             { data: 'shippingDate', "width": "5%" },
@@ -26,7 +27,7 @@ function loadDataTable() {
                     let cancelButton = '';
                     if (orderStatus != "Cancelled") {
                         cancelButton = `
-                        <a onClick=Delete('/customer/order/cancel?id=${row.id}') class="btn btn-outline-danger mx-2" >
+                        <a onClick=Delete('/admin/order/CancelFromOrderList?id=${row.id}&userId=${row.user.id}') class="btn btn-outline-danger mx-2" >
                             <i class="bi bi-trash-fill"></i> Cancel Order
                             </a >
                         `;
@@ -41,7 +42,7 @@ function loadDataTable() {
                     return `
                         <div class="w-75 btn-group" role="group" >
                             ${cancelButton}
-                            <a href="/customer/order/details?id=${row.id}" class="btn btn-outline-success mx-2">
+                            <a href="/admin/order/details?id=${row.id}&userId=${row.user.id}" class="btn btn-outline-success mx-2">
                                <i class="bi bi-pencil-square"></i> Show Details
                             </a>
                         </div>

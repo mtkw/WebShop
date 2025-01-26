@@ -1,0 +1,120 @@
+﻿@model OrderViewModel
+
+<div class="container text-center mt-5">
+    <div class="row mb-5">
+        @if (Model.orderHeader.FirstOrDefault().OrderStatus == SD.StatusCancelled)
+        {
+            <div class="col-3">
+                <button class="btn btn-success" disabled>Shipping Confirmation</button>
+            </div>
+        }
+        else
+        {
+            <div class="col-3">
+                <button class="btn btn-success">Shipping Confirmation</button>
+            </div>
+        }
+        @if(Model.orderHeader.FirstOrDefault().PaymentStatus == SD.PaymentStatusApproved)
+        {
+            <div class="col-3">
+                <button class="btn btn-primary">Refound Payments</button>
+            </div>
+        }
+        else
+        {
+            <div class="col-3">
+                <button class="btn btn-primary" disabled>Refound Payments</button>
+            </div>
+        }
+
+        @if (Model.orderHeader.FirstOrDefault().OrderStatus == SD.StatusCancelled || Model.orderHeader.FirstOrDefault().OrderStatus == SD.StatusCancelledByAdmin)
+        {
+            <div class="col-3">
+                <a class="btn btn-danger" disabled>Cancel Order</a>
+            </div>
+        }
+        else
+        {
+            <div class="col-3">
+                <a class="btn btn-danger" asp-area="Admin" asp-controller="Order" asp-action="Cancel" asp-route-userId="@Model.orderHeader.FirstOrDefault().ApplicationUserId" asp-route-id="@Model.orderHeader.FirstOrDefault().Id">Cancel Order</a>
+            </div>
+        }
+        <div class="col-3">
+            <button class="btn btn-info">Send Message to User</button>
+        </div>
+    </div>
+    <div class="row row-cols-4">
+        <div class="col">Order Status: @Model.orderHeader.FirstOrDefault().OrderStatus</div>
+        <div class="col">Payment Status: @Model.orderHeader.FirstOrDefault().PaymentStatus</div>
+        <div class="col">
+            Tracking Number: @if (string.IsNullOrEmpty(@Model.orderHeader.FirstOrDefault().TrackingNumber))
+            {
+                <span>The parcel is waiting to be shipped.</span>
+            }
+            else
+            {
+                @Model.orderHeader.FirstOrDefault().TrackingNumber
+            }
+        </div>
+        <div class="col">
+            Carrier: @if (string.IsNullOrEmpty(@Model.orderHeader.FirstOrDefault().Carrier))
+            {
+                <span>The parcel is waiting to be shipped.</span>
+            }
+            else
+            {
+                @Model.orderHeader.FirstOrDefault().Carrier
+            }
+        </div>
+    </div>
+    <div class="row mt-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="10%">Image</th>
+                    <th width="10%">Product Name</th>
+                    <th width="30%">Description</th>
+                    <th width="20%">Unit Price</th>
+                    <th width="10%">Quantity</th>
+                    <th width="20%">Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var orderDetail in Model.orderDetail)
+                {
+                    <tr>
+                        <td><a asp-controller="Products" asp-action="Details" asp-route-id="@orderDetail.ProductId"><img src="~/img/@(orderDetail.Product.ImgPath).jpg" class="d-block carousel-image" alt="@orderDetail.Product.Name" /></a></td>
+                        <td>@orderDetail.Product.Name</td>
+                        <td>@orderDetail.Product.Description</td>
+                        <td>@orderDetail.Product.Price @orderDetail.Product.Currency</td>
+                        <td>@orderDetail.Count</td>
+                        <td>@(orderDetail.Count * orderDetail.Price) @orderDetail.Product.Currency</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="10%"></th>
+                    <th width="10%"></th>
+                    <th width="30%"></th>
+                    <th width="20%"></th>
+                    <th width="10%"></th>
+                    <th width="20%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Summary</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Order Total Value: @Model.orderHeader.FirstOrDefault().OrderTotal @Model.orderDetail.FirstOrDefault().Product.Currency</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
