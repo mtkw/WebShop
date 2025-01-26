@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using WebShop.Models;
+using WebShop.Models.Models;
 using WebShop.Utility;
 
 namespace WebShop.Areas.Identity.Pages.Account

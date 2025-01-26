@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using WebShop.Models;
+using WebShop.Models.Models;
 
 namespace WebShop.Repository.IRepository
 {

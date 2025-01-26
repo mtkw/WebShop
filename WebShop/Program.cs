@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WebShop.Data;
+using WebShop.DataAccess.Data;
 using WebShop.Repository;
 using WebShop.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;

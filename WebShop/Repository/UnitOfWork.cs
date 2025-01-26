@@ -1,4 +1,4 @@
-﻿using WebShop.Data;
+﻿using WebShop.DataAccess.Data;
 using WebShop.Repository.IRepository;
 
 namespace WebShop.Repository

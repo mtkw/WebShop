@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebShop.Models;
+using WebShop.Models.Models;
 using WebShop.Repository.IRepository;
 using WebShop.Utility;
 

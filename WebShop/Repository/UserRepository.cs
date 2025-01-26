@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebShop.Models;
+using WebShop.Models.Models;
 using WebShop.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
-using WebShop.Data;
+using WebShop.DataAccess.Data;
 
 namespace WebShop.Repository
 {

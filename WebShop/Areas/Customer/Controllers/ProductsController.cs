@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Climate;
 using System.Security.Claims;
-using WebShop.Models;
-using WebShop.Models.Views;
+using WebShop.Models.Models;
+using WebShop.Models.Models.Views;
 using WebShop.Repository.IRepository;
 using WebShop.Utility;
-using Product = WebShop.Models.Product;
+using Product = WebShop.Models.Models.Product;
 
 namespace WebShop.Areas.Customer.Controllers
 {

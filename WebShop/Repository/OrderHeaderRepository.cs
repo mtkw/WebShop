@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Stripe.Climate;
-using WebShop.Data;
-using WebShop.Models;
+using WebShop.DataAccess.Data;
+using WebShop.Models.Models;
 using WebShop.Repository.IRepository;
 
 namespace WebShop.Repository

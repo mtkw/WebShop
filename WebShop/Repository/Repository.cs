@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using WebShop.Data;
+using WebShop.DataAccess.Data;
 using WebShop.Repository.IRepository;
 
 namespace WebShop.Repository
