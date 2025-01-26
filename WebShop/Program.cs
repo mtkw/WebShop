@@ -43,6 +43,13 @@ namespace WebShop
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
 
+            //Konfiguracja logowanie i rejestracja poprzez Facebooka
+            builder.Services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = builder.Configuration.GetSection("Authentication:Facebook:AppId").Value;
+                options.AppSecret = builder.Configuration.GetSection("Authentication:Facebook:AppSecret").Value;
+            });
+
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {

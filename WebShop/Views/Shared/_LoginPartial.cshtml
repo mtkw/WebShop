@@ -103,6 +103,17 @@ else
                                     </div>
                                 </form>
                             </section>
+                            <div class="col-md-12 col-md-offset-2">
+                                <section>
+                                    <h3>Use another service to log in.</h3>
+                                    <hr />
+                                    <form id="external-account" asp-area="Identity" asp-page="/Account/ExternalLogin" asp-route-returnUrl="~/" method="post" class="form-horizontal">
+                                        <div>
+                                             <button type="submit" class="btn btn-primary" name="provider" value="Facebook" title="Log in using your Facebook account">Facebook</button>
+                                        </div>
+                                    </form>
+                                </section>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
