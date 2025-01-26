@@ -9,6 +9,7 @@ function loadDataTable() {
         "ajax": {
             url: '/admin/category/getall'
         },
+        scrollX: true,
         "columns": [
             { data: 'id', "width": "30%" },
             { data: 'name', "width": "50%" },

@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@using WebShop.Models.Views
+@using WebShop.Models.Models.Views
 @model ShoppingCartVM
 
 <div class="container">
@@ -14,41 +14,41 @@
         </div>
     </div>
     <div class="row mt-2 justify-content-center align-items-center">
-        <div class="col-12 text-center">
-            @foreach(var product in Model.Products)
+        <div class="col-12 col-md-10 col-sm-6 text-center">
+            @if(Model.Products is not null)
             {
-            <div class="row mt-4 shadow justify-content-center align-content-center">
-                <div class="col-3">
-                    <img class="card-img-top" src="~/img/@(product.Product.ImgPath)" alt="@product.Product.Name" style="height: 100px;">
-                </div>
-                <div class="col-2">
-                    @product.Product.Name
-                </div>
-                <div class="col-2">
-                    @product.Product.Price @product.Product.Currency
-                </div>
-                    <div class="col-1">
-                        @product.Count
+                @foreach (var product in Model.Products.CartItems.ToList())
+                {
+                    <div class="row mt-4 shadow justify-content-center align-content-center">
+                        <div class="col-3">
+                            <img class="card-img-top" src="~/img/@(product.Product.ImgPath).jpg" alt="@product.Product.Name" style="height: 100px;">
+                        </div>
+                        <div class="col-2 col-md-1">
+                            @product.Product.Name
+                        </div>
+                        <div class="col-2 col-md-1">
+                            @product.Product.Price @product.Product.Currency
+                        </div>
+                        <div class="col-1">
+                            @product.TotalQuantity
+                        </div>
+                        <div class="col-2 col-md-1">
+                            @product.TotalAmmount @product.Product.Currency
+                        </div>
+                        <div class="col-3">
+                            <a class="btn btn-outline-success" asp-area="Customer" asp-controller="ShoppingCart" asp-action="IncrementProductInCart" asp-route-productId="@product.ProductId">+</a>
+                            <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="DecrementProductInCart" asp-route-productId="@product.ProductId">-</a>
+                        </div>
+                        <div class="col-1">
+                            <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="RemoveProductFromCart" asp-route-productId="@product.ProductId">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-2">
-                        @(product.Count * product.Product.Price) @product.Product.Currency
-                    </div>
-                <div class="col-1">
-                        <a class="btn btn-outline-success" asp-area="Customer" asp-controller="ShoppingCart" asp-action="IncrementProductInCart" asp-route-cartId="@product.Id">+</a>
-                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="DecrementProductInCart" asp-route-cartId="@product.Id">-</a>
-                </div>
-                    <div class="col-1">
-                        <a class="btn btn-outline-danger" asp-area="Customer" asp-controller="ShoppingCart" asp-action="RemoveProductFromCart" asp-route-cartId="@product.Id">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </div>
-            </div>  
-            }
-            @if(Model.TotalCountOfProducts > 0)
-            {
+                }
                 <div class="card-footer mt-3">
-                    <strong>TOTAL PRICE:</strong> @Model.OrderHeader.OrderTotal.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
-                    <strong>Total Quantity:</strong> @Model.TotalCountOfProducts
+                    <strong>TOTAL PRICE:</strong> @Model.Products.Ammount.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
+                    <strong>Total Quantity:</strong> @Model.Products.CartCountItems
                 </div>
                 <div class="row justify-content-center">
                     <a class="btn btn-outline-primary col-2" asp-asp-area="Customer" asp-controller="ShoppingCart" asp-action="Summary">Summary</a>

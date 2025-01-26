@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using WebShop.Data;
-using WebShop.Repository;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Data;
+using WebShop.DataAccess.Repository;
+using WebShop.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using WebShop.Middleware;
 using WebShop.Utility;
@@ -43,6 +43,13 @@ namespace WebShop
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
 
+            //Konfiguracja logowanie i rejestracja poprzez Facebooka
+            builder.Services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = builder.Configuration.GetSection("Authentication:Facebook:AppId").Value;
+                options.AppSecret = builder.Configuration.GetSection("Authentication:Facebook:AppSecret").Value;
+            });
+
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
@@ -54,6 +61,7 @@ namespace WebShop
             builder.Services.AddRazorPages(); // Konfiguracja Razor pages bez tego ¿adna strona stworzona dla Identity nie bêdzie dzia³aæ 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            
 
             var app = builder.Build();
 

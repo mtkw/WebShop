@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@using WebShop.Models.Views
+@using WebShop.Models.Models.Views
 @model ShoppingCartVM
 
 <form method="post">
@@ -15,7 +15,7 @@
                         </h5>
                     </div>
                     <div class="col-6 text-end">
-                        <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-outline-danger btn-sm">Back to Cart</a>
+                        <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-outline-danger btn-sm bg-dark bg-opacity-50">Back to Cart</a>
                     </div>
                 </div>
             </div>
@@ -88,14 +88,14 @@
                                 <span class="text-info">Order Summary:</span>
                             </h4>
                             <ul class="list-group mb-3">
-                                @foreach (var details in Model.Products)
+                                @foreach (var details in Model.Products.CartItems)
                                 {
                                     <li class="list-group-item d-flex justify-content-between">
                                         <div>
                                             <h6 class="my-0">@details.Product.Name</h6>
-                                            <small class="text-muted">Quantity: @details.Count</small>
+                                            <small class="text-muted">Quantity: @details.TotalQuantity</small>
                                         </div>
-                                        <span class="text-muted">@(details.Product.Price * details.Count) USD</span>
+                                        <span class="text-muted">@details.TotalAmmount USD</span>
                                     </li>
                                 }
 

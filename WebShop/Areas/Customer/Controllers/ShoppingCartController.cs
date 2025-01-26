@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Stripe.BillingPortal;
 using Stripe.Checkout;
 using System.Security.Claims;
-using WebShop.Models;
-using WebShop.Models.Views;
-using WebShop.Repository.IRepository;
+using WebShop.Models.Models;
+using WebShop.Models.Models.Views;
+using WebShop.DataAccess.Repository.IRepository;
 using WebShop.Utility;
 using Session = Stripe.Checkout.Session;
 using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;
@@ -30,37 +30,44 @@ namespace WebShop.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            /*            ShoppingCartVM = new()
-                        {
-                            Products = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includProperties: "Product"),
-                            TotalCountOfProducts = CalculateCountOfProducts(ShoppingCartVM.Products.ToList()),
-                            OrderHeader = new()
-                        };*/
             ShoppingCartVM = new ShoppingCartVM();
-            ShoppingCartVM.Products = _unitOfWork.ShoppingCart.GetAll(u=>u.ApplicationUserId == userId, includProperties: "Product");
-            ShoppingCartVM.TotalCountOfProducts = CalculateCountOfProducts(ShoppingCartVM.Products.ToList());
-            ShoppingCartVM.OrderHeader = new OrderHeader();
-
-            foreach (var cart in ShoppingCartVM.Products)
+            ShoppingCartVM.Products = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId, includProperties: "CartItems");
+            if (ShoppingCartVM.Products is not null) 
             {
-                ShoppingCartVM.OrderHeader.OrderTotal += (cart.Count * cart.Product.Price);
+                foreach (var cartItem in ShoppingCartVM.Products.CartItems)
+                {
+                    cartItem.Product = _unitOfWork.Product.Get(p => p.Id == cartItem.ProductId);
+                }
+                ShoppingCartVM.TotalCountOfProducts = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId).CartCountItems;
+                ShoppingCartVM.OrderHeader = new OrderHeader();
             }
-
-
+            
             return View(ShoppingCartVM);
         }
 
-        public IActionResult IncrementProductInCart(int cartId)
+        public IActionResult IncrementProductInCart(int productId)
         {
-            var cartFromDB = _unitOfWork.ShoppingCart.Get(u=>u.Id == cartId);
-            var productFromCart = _unitOfWork.Product.Get(u=>u.Id == cartFromDB.ProductId);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if(productFromCart.Quantity != 0)
+            var shopingCartFromDB = _unitOfWork.ShoppingCart.Get(x => x.ApplicationUserId == userId, includProperties: "CartItems");
+            var cartItemFromShoppingCart = shopingCartFromDB.CartItems.First(x => x.ProductId == productId);
+            var productFromDB = _unitOfWork.Product.Get(x => x.Id == productId);
+
+            if (productFromDB.Quantity != 0)
             {
-                cartFromDB.Count++;
-                _unitOfWork.ShoppingCart.Update(cartFromDB);
-                productFromCart.Quantity -= 1;
-                _unitOfWork.Product.Update(productFromCart);
+                cartItemFromShoppingCart.TotalQuantity += 1;
+                cartItemFromShoppingCart.TotalAmmount += (decimal)productFromDB.Price;
+
+                productFromDB.Quantity -= 1;
+
+                shopingCartFromDB.CartCountItems += 1;
+                shopingCartFromDB.Ammount += (decimal)productFromDB.Price;
+
+                _unitOfWork.CartItem.Update(cartItemFromShoppingCart);
+                _unitOfWork.Product.Update(productFromDB);
+                _unitOfWork.ShoppingCart.Update(shopingCartFromDB);
+
                 TempData["success"] = "Add Item To Cart";
             }
             else
@@ -68,67 +75,68 @@ namespace WebShop.Areas.Customer.Controllers
                 TempData["error"] = "Product sold out";
             }
             _unitOfWork.Save();
-
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult RemoveProductFromCart(int cartId)
+        public IActionResult RemoveProductFromCart(int productId)
         {
-            var cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
-            var productFromCart = _unitOfWork.Product.Get(u => u.Id == cartFromDB.ProductId);
 
-            productFromCart.Quantity += cartFromDB.Count;
-            _unitOfWork.ShoppingCart.Remove(cartFromDB);
-            _unitOfWork.Product.Update(productFromCart);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var shopingCartFromDB = _unitOfWork.ShoppingCart.Get(x => x.ApplicationUserId == userId, includProperties: "CartItems");
+            var cartItemFromShoppingCart = shopingCartFromDB.CartItems.First(x => x.ProductId == productId);
+            var productFromDB = _unitOfWork.Product.Get(x => x.Id == productId);
+
+            productFromDB.Quantity += cartItemFromShoppingCart.TotalQuantity;
+            shopingCartFromDB.CartCountItems -= cartItemFromShoppingCart.TotalQuantity;
+            shopingCartFromDB.Ammount -= cartItemFromShoppingCart.TotalAmmount;
+            _unitOfWork.Product.Update(productFromDB);
+            _unitOfWork.ShoppingCart.Update(shopingCartFromDB);
+            _unitOfWork.CartItem.Remove(cartItemFromShoppingCart);
+
             TempData["success"] = "Item Removed From Cart";
             _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult DecrementProductInCart(int cartId)
+        public IActionResult DecrementProductInCart(int productId)
         {
-            var cartFromDB = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
-            var productFromCart = _unitOfWork.Product.Get(u => u.Id == cartFromDB.ProductId);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if (cartFromDB.Count == 1)
+            var shopingCartFromDB = _unitOfWork.ShoppingCart.Get(x => x.ApplicationUserId == userId, includProperties: "CartItems");
+            var cartItemFromShoppingCart = shopingCartFromDB.CartItems.First(x => x.ProductId == productId);
+            var productFromDB = _unitOfWork.Product.Get(x => x.Id == productId);
+
+            if (cartItemFromShoppingCart.TotalQuantity == 1) 
             {
-                _unitOfWork.ShoppingCart.Remove(cartFromDB);
-                productFromCart.Quantity += 1;
-                _unitOfWork.Product.Update(productFromCart);
+                _unitOfWork.CartItem.Remove(cartItemFromShoppingCart);
+                shopingCartFromDB.CartCountItems -= 1;
+                shopingCartFromDB.Ammount -= (decimal)productFromDB.Price;
+                productFromDB.Quantity += 1;
+                _unitOfWork.Product.Update(productFromDB);
                 TempData["success"] = "Item Removed From Cart";
             }
             else
             {
-                cartFromDB.Count--;
-                _unitOfWork.ShoppingCart.Update(cartFromDB);
-                productFromCart.Quantity += 1;
-                _unitOfWork.Product.Update(productFromCart);
+                cartItemFromShoppingCart.TotalQuantity -= 1;
+                cartItemFromShoppingCart.TotalAmmount -= (decimal)productFromDB.Price;
+                _unitOfWork.CartItem.Update(cartItemFromShoppingCart);
+
+                shopingCartFromDB.CartCountItems -= 1;
+                shopingCartFromDB.Ammount -= (decimal)productFromDB.Price;
+                _unitOfWork.ShoppingCart.Update(shopingCartFromDB);
+
+                productFromDB.Quantity += 1;
+                _unitOfWork.Product.Update(productFromDB);
                 TempData["success"] = "One item has been removed from the cart";
             }
+
             _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private int CalculateCountOfProducts(List<ShoppingCart> cart) 
-        { 
-            var count = 0;
-            foreach (var cartItem in cart) 
-            {
-                count += cartItem.Count;
-            }
-            return count;
-        }
-
-        private double CalculateCartTotalPrice(List<ShoppingCart> cart) 
-        {
-            double totalPrice = 0;
-            foreach (var cartItem in cart) 
-            {
-                totalPrice += (cartItem.Count * cartItem.Product.Price);
-            }
-            return totalPrice;
         }
         
         public IActionResult Summary()
@@ -136,20 +144,16 @@ namespace WebShop.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-
-/*            ShoppingCartVM = new() 
-            {
-                Products = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includProperties: "Product"),
-                TotalCountOfProducts = CalculateCountOfProducts(ShoppingCartVM.Products.ToList()),
-                OrderHeader = new()
-            };*/
-
             ShoppingCartVM = new ShoppingCartVM();
-            ShoppingCartVM.Products = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includProperties: "Product");
-            ShoppingCartVM.TotalCountOfProducts = CalculateCountOfProducts(ShoppingCartVM.Products.ToList());
+            ShoppingCartVM.Products = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId, includProperties: "CartItems");
+            foreach (var cartItem in ShoppingCartVM.Products.CartItems)
+            {
+                cartItem.Product = _unitOfWork.Product.Get(p => p.Id == cartItem.ProductId);
+            }
             ShoppingCartVM.OrderHeader = new OrderHeader();
 
-            ShoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(ShoppingCartVM.Products.ToList());
+            ShoppingCartVM.TotalCountOfProducts = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId).CartCountItems;
+            ShoppingCartVM.OrderHeader.OrderTotal = (double)OrderTotal(ShoppingCartVM.Products.CartItems);
             ShoppingCartVM.OrderHeader.User = _unitOfWork.ApplicationUser.Get(x=>x.Id == userId);
             ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.User.Name;
             ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.User.PhoneNumber;
@@ -160,6 +164,17 @@ namespace WebShop.Areas.Customer.Controllers
 
             return View(ShoppingCartVM);
         }
+
+        private decimal OrderTotal(ICollection<CartItem> cartItems)
+        {
+            decimal orderTotal = 0;
+            foreach(var item in cartItems)
+            {
+                orderTotal += item.TotalAmmount;
+            }
+            return orderTotal; 
+        }
+
         [HttpPost]
         [ActionName("Summary")]
         public IActionResult SummaryPOST()
@@ -167,12 +182,16 @@ namespace WebShop.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            ShoppingCartVM.Products = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includProperties: "Product");
+            ShoppingCartVM.Products = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId, includProperties: "CartItems");
+            foreach (var cartItem in ShoppingCartVM.Products.CartItems)
+            {
+                cartItem.Product = _unitOfWork.Product.Get(p => p.Id == cartItem.ProductId);
+            }
 
             ShoppingCartVM.OrderHeader.OrderDate= System.DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
 
-            ShoppingCartVM.OrderHeader.OrderTotal = CalculateCartTotalPrice(ShoppingCartVM.Products.ToList());
+            ShoppingCartVM.OrderHeader.OrderTotal = (double)OrderTotal(ShoppingCartVM.Products.CartItems);
 
             ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(x => x.Id == userId);
 
@@ -182,22 +201,15 @@ namespace WebShop.Areas.Customer.Controllers
             _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
             _unitOfWork.Save();
 
-            foreach (var cart in ShoppingCartVM.Products)
+            foreach (var cart in ShoppingCartVM.Products.CartItems)
             {
-                /*                OrderDetail orderDetail = new()
-                                {
-                                   ProductId = cart.ProductId, 
-                                   OrderHeaderId = ShoppingCartVM.OrderHeader.Id,
-                                   Price = cart.Product.Price,
-                                   Count = cart.Count
-                                };*/
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.ProductId = cart.ProductId;
                 orderDetail.OrderHeaderId = ShoppingCartVM.OrderHeader.Id;
                 orderDetail.Price = cart.Product.Price;
-                orderDetail.Count = cart.Count;
+                orderDetail.Count = cart.TotalQuantity;
                 _unitOfWork.OrderDetail.Add(orderDetail);
-                /*                _unitOfWork.Save();*/
+                _unitOfWork.Save();
             }
 
             if (!applicationUser.IsBlocked)
@@ -213,7 +225,7 @@ namespace WebShop.Areas.Customer.Controllers
                     Mode = "payment",
                 };
 
-                foreach (var item in ShoppingCartVM.Products)
+                foreach (var item in ShoppingCartVM.Products.CartItems)
                 {
                     var sessionLineItem = new SessionLineItemOptions
                     {
@@ -223,10 +235,10 @@ namespace WebShop.Areas.Customer.Controllers
                             Currency = "usd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = item.Product.Name
+                                 Name = item.Product.Name
                             }
                         },
-                        Quantity = item.Count
+                         Quantity = item.TotalQuantity
                     };
                     options.LineItems.Add(sessionLineItem);
                 }
@@ -261,7 +273,7 @@ namespace WebShop.Areas.Customer.Controllers
                     _unitOfWork.Save();
                 }
             }
-            var shoppingCart = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId, includProperties: "Product");
+            var shoppingCart = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId, includProperties: "CartItems");
             foreach (var product in shoppingCart)
             {
                 _unitOfWork.ShoppingCart.Remove(product);

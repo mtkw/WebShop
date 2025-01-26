@@ -14,11 +14,11 @@ html {
 
 html {
     position: relative;
-    min-height: 100%;
 }
 
 body {
   margin-bottom: 60px;
+/*  background-color:bisque;*/
 }
 
 
@@ -163,20 +163,27 @@ body {
 }
 
 .cart-counter {
-    position: absolute; /* Position the counter absolutely */
-    bottom: 0; /* Align to the bottom */
-    right: 0; /* Align to the right */
-    background-color: white; /* Background color for visibility */
-    color: red; /* Text color */
+    position: absolute;  Position the counter absolutely 
+    bottom: 0;  Align to the bottom 
+    right: 0;  Align to the right 
+    background-color: white;  Background color for visibility 
+    color: red;  Text color 
     opacity: .6;
-    border-radius: 50%; /* Make it circular */
-    width: 15px; /* Set width */
-    height: 15px; /* Set height */
-    display: flex; /* Flexbox for centering */
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
-    font-size: 12px; /* Font size */
+    border-radius: 50%;  Make it circular 
+    width: 15px;  Set width 
+    height: 15px;  Set height 
+    display: flex;  Flexbox for centering 
+    align-items: center;  Center vertically 
+    justify-content: center;  Center horizontally 
+    font-size: 12px;  Font size 
     font-weight: 500;
+}
+
+@media (max-width: 999px){
+    #cart-icon{
+        width: 1rem;
+        text-align:center;
+    }
 }
 
 .roboto-thin {
@@ -249,6 +256,36 @@ body {
     font-family: "Roboto", sans-serif;
     font-weight: 900;
     font-style: italic;
+}
+
+.disabled {
+    color: gray; /* Change text color to indicate it's disabled */
+    pointer-events: none; /* Disable click events */
+    text-decoration: none; /* Remove underline */
+    cursor: default; /* Change cursor to default */
+    position: relative; /* Position for tooltip */
+}
+
+.tooltip {
+    visibility: hidden; /* Hidden by default */
+    background-color: grey; /* Tooltip background */
+    color: #fff; /* Tooltip text color */
+    text-align: center; /* Center text */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px; /* Padding */
+    position: absolute; /* Positioning */
+    z-index: 1; /* Ensure it appears above other elements */
+    bottom: 125%; /* Position above the link */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center adjustment */
+    opacity: 0; /* Start invisible */
+    transition: opacity 0.3s; /* Fade effect */
+}
+
+
+.btn-group > a:hover .tooltip {
+    visibility: visible; /* Show tooltip on hover */
+    opacity: 1; /* Fade in */
 }
 
 

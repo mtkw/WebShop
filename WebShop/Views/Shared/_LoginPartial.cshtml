@@ -1,10 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using WebShop.Models.Models.Views
+
+@model LoginViewModel
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
 @{
     var CartItemCounter = Context.Items["CartItemCounter"];
+    
 }
 
 <ul class="navbar-nav">
@@ -12,10 +16,17 @@
 {
         @if (!User.IsInRole(Roles.Role_Admin))
         {
-            <li class="nav-item">
+            <li class="nav-item" id="cart-icon">
                 <a class="nav-link" id="cart-icon" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
-                    <i class="bi bi-cart"></i> 
-                    <div class="cart-counter">@CartItemCounter
+                    <div class="position-relative">
+                        <i class="bi bi-cart"></i>
+                        <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
+                            @if(!CartItemCounter.ToString().Equals("0"))
+                            {
+                                @CartItemCounter
+                            }
+
+                        </div>
                     </div>
                 </a>
             </li>
@@ -35,8 +46,85 @@ else
     <li class="nav-item">
         <a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link text-light" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <li class="nav-item">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Login
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-save="modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Login Form</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <section>
+                                <form id="account" method="post" asp-area="Identity" asp-page="/Account/Login">
+                                    <h2>Use a local account to log in.</h2>
+                                    <hr />
+                                    @if (!string.IsNullOrEmpty(Model.ErrorMsg))
+                                    {
+                                        <span>@Model.ErrorMsg</span>
+                                    }
+                                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                                        <label asp-for="Email" class="form-label">Email</label>
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                        <div>@Html.ValidationMessageFor(m => m.Email)</div>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="password" asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                                        <label asp-for="Password" class="form-label">Password</label>
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                    <div class="checkbox mb-3">
+                                        <label asp-for="RememberMe" class="form-label">
+                                            <input class="form-check-input" asp-for="RememberMe" />
+                                            @Html.DisplayNameFor(m => m.RememberMe)
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                                    </div>
+                                    <div>
+                                        <p>
+                                            <a id="forgot-password" asp-area="Identity" asp-page="/Account/ForgotPassword">Forgot your password?</a>
+                                        </p>
+                                        <p>
+                                            <a asp-area="Identity" asp-page="/Account/Register">Register as a new user</a>
+                                        </p>
+                                        <p>
+                                            <a id="resend-confirmation" asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">Resend email confirmation</a>
+                                        </p>
+                                    </div>
+                                </form>
+                            </section>
+                            <div class="col-md-12 col-md-offset-2">
+                                <section>
+                                    <h3>Use another service to log in.</h3>
+                                    <hr />
+                                    <form id="external-account" asp-area="Identity" asp-page="/Account/ExternalLogin" asp-route-returnUrl="~/" method="post" class="form-horizontal">
+                                        <div>
+                                             <button type="submit" class="btn btn-primary" name="provider" value="Facebook" title="Log in using your Facebook account">Facebook</button>
+                                        </div>
+                                    </form>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </li>
+
 }
 </ul>
+@section Scripts {
+     <partial name="_ValidationScriptsPartial" /> 
+}

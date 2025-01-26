@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebShop.Repository.IRepository;
-using WebShop.Models;
-using WebShop.Models.Views;
+using WebShop.DataAccess.Repository.IRepository;
+using WebShop.Models.Models;
+using WebShop.Models.Models.Views;
 
 namespace WebShop.Areas.Customer.Controllers
 {

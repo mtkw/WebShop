@@ -1,4 +1,4 @@
-﻿@using WebShop.Models.Views
+﻿@using WebShop.Models.Models.Views
 @model ProductSupplierCategoryVM
 
 <div class="container">
@@ -43,7 +43,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                                <img class="card-img-top" src="~/img/@(product.ImgPath)" alt="@product.Name" style="height: 200px;">
+                                <img class="card-img-top" src="~/img/@(product.ImgPath).jpg" alt="@product.Name" style="height: 200px;">
                             </a>
                             <div class="card-body">
 

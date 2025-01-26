@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using WebShop.Models.Models;
+using WebShop.Utility;
 
 namespace WebShop.Areas.Identity.Pages.Account
 {
@@ -84,6 +86,17 @@ namespace WebShop.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            [Required]
+            [StringLength(15, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string Name { get; set; }
+            [Required]
+            [StringLength(15, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string Surname { get; set; }
+            public string? StreetAddress { get; set; }
+            public string? City { get; set; }
+            public string? State { get; set; }
+            public string? PostalCode { get; set; }
+            public string? PhoneNumber { get; set; }
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
@@ -131,7 +144,9 @@ namespace WebShop.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        Name = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                        Surname = info.Principal.FindFirstValue(ClaimTypes.Surname),
                     };
                 }
                 return Page();
@@ -155,6 +170,13 @@ namespace WebShop.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.StreetAddress = Input.StreetAddress;
+                user.City = Input.City;
+                user.State = Input.State;
+                user.PostalCode = Input.PostalCode;
+                user.Name = Input.Name;
+                user.Surname = Input.Surname;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -162,6 +184,7 @@ namespace WebShop.Areas.Identity.Pages.Account
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
+                        await _userManager.AddToRoleAsync(user, Roles.Role_User);
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
                         var userId = await _userManager.GetUserIdAsync(user);
@@ -197,11 +220,11 @@ namespace WebShop.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {

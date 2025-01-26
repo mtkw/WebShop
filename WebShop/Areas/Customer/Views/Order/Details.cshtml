@@ -1,0 +1,85 @@
+﻿@model OrderViewModel
+
+@if (string.IsNullOrEmpty(Model.orderHeader.FirstOrDefault().TrackingNumber) && Model.orderHeader.FirstOrDefault().OrderStatus != SD.StatusCancelled) 
+{
+    <a asp-controller="Order" asp-action="CancelFromDetailsPage" asp-route-id="@Model.orderHeader.FirstOrDefault().Id" class="btn btn-danger">Cancel Order</a>
+    <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="You can cancel an order that has not been shipped yet. If you want to cancel the purchase of goods that have been sent to you, please complete the return form and return it together with the product to the address of our warehouse.">
+        <i class="bi bi-info-circle"></i>
+    </button>
+
+}
+<div class="container text-center mt-5">
+    <div class="row row-cols-4">
+        <div class="col">Order Status: @Model.orderHeader.FirstOrDefault().OrderStatus</div>
+        <div class="col">Payment Status: @Model.orderHeader.FirstOrDefault().PaymentStatus</div>
+        <div class="col">Tracking Number: @if (string.IsNullOrEmpty(@Model.orderHeader.FirstOrDefault().TrackingNumber))
+            {
+                <span>The parcel is waiting to be shipped.</span>
+            }else
+            {
+                @Model.orderHeader.FirstOrDefault().TrackingNumber
+            }
+            </div>
+        <div class="col">Carrier: @if (string.IsNullOrEmpty(@Model.orderHeader.FirstOrDefault().Carrier))
+            {
+                <span>The parcel is waiting to be shipped.</span>
+            }else
+            {
+                @Model.orderHeader.FirstOrDefault().Carrier
+            }
+            </div>
+    </div>
+    <div class="row mt-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="10%">Image</th>
+                    <th width="10%">Product Name</th>
+                    <th width="30%">Description</th>
+                    <th width="20%">Unit Price</th>
+                    <th width="10%">Quantity</th>
+                    <th width="20%">Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var orderDetail in Model.orderDetail)
+                {
+                    <tr>
+                        <td><a asp-controller="Products" asp-action="Details" asp-route-id="@orderDetail.ProductId"><img src="~/img/@(orderDetail.Product.ImgPath).jpg" class="d-block carousel-image" alt="@orderDetail.Product.Name" /></a></td>
+                        <td>@orderDetail.Product.Name</td>
+                        <td>@orderDetail.Product.Description</td>
+                        <td>@orderDetail.Product.Price @orderDetail.Product.Currency</td>
+                        <td>@orderDetail.Count</td>
+                        <td>@(orderDetail.Count * orderDetail.Price) @orderDetail.Product.Currency</td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-center"><a class="btn btn-success" asp-controller="Products" asp-action="AddToCart" asp-route-productId="@orderDetail.ProductId" asp-route-orderId="@orderDetail.OrderHeader.Id">Order Again</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="10%"></th>
+                    <th width="10%"></th>
+                    <th width="30%"></th>
+                    <th width="20%"></th>
+                    <th width="10%"></th>
+                    <th width="20%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <td>Summary</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Order Total Value: @Model.orderHeader.FirstOrDefault().OrderTotal @Model.orderDetail.FirstOrDefault().Product.Currency</td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

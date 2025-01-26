@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using WebShop.Repository.IRepository;
+using WebShop.DataAccess.Repository.IRepository;
 
 namespace WebShop.Middleware
 {
@@ -29,13 +29,11 @@ namespace WebShop.Middleware
                 // You can now access claims
                 var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var userEmail = claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
-                var cart = await _unitOfWork.ShoppingCart.GetAllAsync(x => x.ApplicationUserId == userId);
-                int cartItemCount = 0;
-                foreach (var cartItem in cart)
-                {
-                    cartItemCount += cartItem.Count;
-                }
-                context.Items["CartItemCounter"] = cartItemCount;
+                var cart = await _unitOfWork.ShoppingCart.GetAllAsync(x => x.ApplicationUserId == userId, includProperties: "CartItems");
+                if (cart.Count != 0) { context.Items["CartItemCounter"] = cart.First().CartCountItems; }
+                else { context.Items["CartItemCounter"] = 0; }
+
+                
 
             }
 

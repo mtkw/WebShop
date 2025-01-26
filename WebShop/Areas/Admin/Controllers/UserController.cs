@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebShop.Models;
-using WebShop.Repository.IRepository;
+using WebShop.Models.Models;
+using WebShop.DataAccess.Repository.IRepository;
 
 namespace WebShop.Areas.Admin.Controllers
 {

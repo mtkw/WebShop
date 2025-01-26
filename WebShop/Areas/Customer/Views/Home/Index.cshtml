@@ -1,10 +1,10 @@
 ﻿@using System.Linq
-@using WebShop.Models.Views
+@using WebShop.Models.Models.Views
 @model ProductSupplierCategoryVM
 
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8" style="min-height: 55vh">
+    <div class="row justify-content-center mt-xl-5">
+        <div class="col-md-8 h-auto">
             <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
 
                 <!-- Carousel Indicators -->
@@ -29,7 +29,7 @@
                         <div class="carousel-item @(product.Id == 1 ? "active" : "")">
 
                             <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                                <img src="img/@(product.Name).jpg" class="d-block carousel-image" alt="@product.Name" />
+                                <img src="~/img/@(product.Name).jpg" class="d-block carousel-image" alt="@product.Name" />
                             </a>
                             <!-- Carousel Caption -->
                             <div class="carousel-caption d-block" style="background: rgba(0, 0, 0, 0.3); padding: 5px 8px; border-radius: 4px;">
@@ -55,7 +55,7 @@
     </div>
 
     <!-- Categories Section -->
-    <div class="row justify-content-center mt-4">
+    <div class="row justify-content-center mt-xl-5 mt-md-1">
         <div class="col-12 text-center">
             <h3 class="text-dark">Most Popular Categories</h3>
         </div>
