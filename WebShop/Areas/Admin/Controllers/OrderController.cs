@@ -117,6 +117,12 @@ namespace WebShop.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Details), new { id = id, userId = userId });
             }
 
+            if(orderToRefound.OrderStatus == SD.StatusShipped)
+            {
+                TempData["error"] = "You cannot refund the order because the order has already been shipped.";
+                return RedirectToAction(nameof(Details), new { id = id, userId = userId });
+            }
+
             var options = new RefundCreateOptions { PaymentIntent = orderToRefound.PaymentIntentId };
             var service = new RefundService();
 
