@@ -17,7 +17,7 @@
         @if(Model.orderHeader.FirstOrDefault().PaymentStatus == SD.PaymentStatusApproved)
         {
             <div class="col-3">
-                <button class="btn btn-primary">Refound Payments</button>
+                <a asp-area="Admin" asp-controller="Order" asp-action="RefoundPayments" asp-route-id="@Model.orderHeader.FirstOrDefault().Id" asp-route-userId="@Model.orderHeader.FirstOrDefault().ApplicationUserId" class="btn btn-primary">Refound Payments</a>
             </div>
         }
         else

@@ -4,6 +4,7 @@ using System.Security.Claims;
 using WebShop.Models.Models;
 using WebShop.DataAccess.Repository.IRepository;
 using WebShop.Utility;
+using Stripe;
 
 namespace WebShop.Areas.Admin.Controllers
 {
@@ -99,6 +100,41 @@ namespace WebShop.Areas.Admin.Controllers
 
 
             return Json(new { success = true, message = "Order Canceled" });
+        }
+
+        public IActionResult RefoundPayments(int id, string userId)
+        {
+            var orderToRefound = _unitOfWork.OrderHeader.Get(u => (u.ApplicationUserId == userId && u.Id == id));
+            if (orderToRefound == null) 
+            {
+                TempData["error"] = "Problem with order refund";
+                return RedirectToAction(nameof(Details), new { id = id, userId = userId });
+            }
+
+            if (orderToRefound.PaymentStatus == SD.StatusRefunded)
+            {
+                TempData["error"] = "Payments already refunded";
+                return RedirectToAction(nameof(Details), new { id = id, userId = userId });
+            }
+
+            var options = new RefundCreateOptions { PaymentIntent = orderToRefound.PaymentIntentId };
+            var service = new RefundService();
+
+            Refund refund = service.Create(options);
+
+            if (refund.Status == "succeeded")
+            {
+                orderToRefound.OrderStatus = SD.StatusRefunded;
+                orderToRefound.PaymentStatus = SD.StatusRefunded;
+                _unitOfWork.Save();
+                TempData["success"] = "Payments Refunded";
+            }
+            else
+            {
+                TempData["error"] = "Problem with refunding payments";
+            }
+
+            return RedirectToAction(nameof(Details), new { id = id, userId = userId });
         }
 
         [HttpGet]
