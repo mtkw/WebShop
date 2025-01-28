@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebShop.DataAccess\WebShop.DataAccess.csproj" />
-    <ProjectReference Include="..\WebShop.Models\WebShop.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

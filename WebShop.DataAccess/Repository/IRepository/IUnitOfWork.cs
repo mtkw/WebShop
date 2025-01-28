@@ -10,6 +10,7 @@
         IUserRepository ApplicationUser { get; } 
         IOrderDetailRepository OrderDetail { get; }
         IOrderHeaderRepository OrderHeader { get; }
+        IUsersMessageRepository UsersMessage { get; }
         void Save();
     }
 }
