@@ -5,6 +5,7 @@ using WebShop.Models.Models;
 using WebShop.DataAccess.Repository.IRepository;
 using WebShop.Utility;
 using Stripe;
+using WebShop.Models.Models.Views;
 
 namespace WebShop.Areas.Admin.Controllers
 {
@@ -35,7 +36,7 @@ namespace WebShop.Areas.Admin.Controllers
         {
             OrderViewModel orderDetailsViewModel = new()
             {
-                orderHeader = _unitOfWork.OrderHeader.GetAll(u => (u.ApplicationUserId == userId && u.Id == id)).ToList(),
+                orderHeader = _unitOfWork.OrderHeader.GetAll(u => (u.ApplicationUserId == userId && u.Id == id), includProperties: "User").ToList(),
                 orderDetail = _unitOfWork.OrderDetail.GetAll(u => u.OrderHeaderId == id, includProperties: "Product").ToList()
 
             };
@@ -142,6 +143,29 @@ namespace WebShop.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Details), new { id = id, userId = userId });
         }
+
+        [HttpPost]
+        public IActionResult SendMessageToUser(UsersMessageViewModel usersMessageViewModel)
+        {
+
+                UsersMessage usersMessage = new UsersMessage
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = usersMessageViewModel.UserId,
+                    Email = usersMessageViewModel.Email,
+                    Subject = usersMessageViewModel.Subject,
+                    Message = usersMessageViewModel.Message,
+                    IsRead = false,
+                    User = _unitOfWork.ApplicationUser.Get(x=>x.Id==usersMessageViewModel.UserId)
+                };
+
+                _unitOfWork.UsersMessage.Add(usersMessage);
+                _unitOfWork.Save();
+
+            TempData["success"] = "Message Sended to User";
+            return RedirectToAction(nameof(Details), new { id = usersMessageViewModel.OrderId, userId = usersMessageViewModel.UserId });
+        }
+
 
         [HttpGet]
         public IActionResult GetAll()

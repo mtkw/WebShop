@@ -1,4 +1,5 @@
-﻿@model OrderViewModel
+﻿@using WebShop.Models.Models.Views
+@model OrderViewModel
 
 <div class="container text-center mt-5">
     <div class="row mb-5">
@@ -40,8 +41,15 @@
             </div>
         }
         <div class="col-3">
-            <button class="btn btn-info">Send Message to User</button>
+            @* <button class="btn btn-info">Send Message to User</button> *@
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Send Message to User
+            </button>
         </div>
+
+        @await Html.PartialAsync("_UsersMessagePartial", new UsersMessageViewModel { User = Model.orderHeader.FirstOrDefault().User, OrderId = Model.orderHeader.FirstOrDefault().Id, UserId = Model.orderHeader.FirstOrDefault().User.Id });
+@*         <partial name="_UsersMessagePartial"/>  *@
+
     </div>
     <div class="row row-cols-4">
         <div class="col">Order Status: @Model.orderHeader.FirstOrDefault().OrderStatus</div>
