@@ -8,6 +8,7 @@
 
 @{
     var CartItemCounter = Context.Items["CartItemCounter"];
+    var MessageCounter = Context.Items["MessageCounter"];
     
 }
 
@@ -33,16 +34,21 @@
             <li class="nav-item" id="message-icon">
                 <a class="nav-link" data-bs-toggle="modal" data-bs-target="#messageModal" id="messageIconAnchor" data-userEmail="@User.Claims.FirstOrDefault().Value">
                     <div class="position-relative">
-                        @if (CartItemCounter.ToString().Equals("0"))
+                        @if (MessageCounter.ToString().Equals("0"))
                         {
                             <i class="bi bi-chat-left-dots"></i>
+                            <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
+                                @MessageCounter
+                            </div>
                         }
                         else
                         {
                             <i class="bi bi-chat-left-dots-fill"></i>
+                            <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
+                                @MessageCounter
+                            </div>
                         }
-                        <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
-                        </div>
+                        
                     </div>
                 </a>
             </li>

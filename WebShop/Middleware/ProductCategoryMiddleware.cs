@@ -33,7 +33,10 @@ namespace WebShop.Middleware
                 if (cart.Count != 0) { context.Items["CartItemCounter"] = cart.First().CartCountItems; }
                 else { context.Items["CartItemCounter"] = 0; }
 
-                
+                var messages = await _unitOfWork.UsersMessage.GetAllAsync(x => x.UserId == userId && !x.IsRead);
+                if (messages.Count != 0) { context.Items["MessageCounter"] = messages.Count; }
+                else { context.Items["MessageCounter"] = 0; }
+
 
             }
 

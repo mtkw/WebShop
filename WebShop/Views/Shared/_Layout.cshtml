@@ -118,54 +118,10 @@
     <script src="https://cdn.tiny.cloud/1/g28lhnxtlihu4l4a381gw7tz47voznshwbi10lmsvlekrfme/tinymce/6/tinymce.min.js" referrerpolicy="origin">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-    <script>
-        // Initialize popovers
-        document.querySelectorAll('[data-bs-toggle="popover"]')
-            .forEach(popover => {
-                new bootstrap.Popover(popover)
-            })
 
-            document.getElementById("messageIconAnchor").addEventListener("click", test);
+    <script src="~/js/main.js"></script>
 
-            function test() {
-                const element =  document.getElementById("messageIconAnchor");
-            const att = element.getAttribute("data-userEmail");
-                getAllMessagesForUser(att);
-            }
-
-            function getAllMessagesForUser(userId)
-            {
-            var url = "/Customer/Message/GetAllMessageForUser";
-
-            var data = { userId: userId };
-
-            $.ajax({
-                type: "GET",
-                url: url,
-                data: data,
-                contentType: 'application/json',
-                DataTransfer: 'json',
-                success: function (data) {
-                    var modalBody = $('#messageModal .modal-body');
-                    modalBody.html('');
-                    $.each(data, function (index, item) {
-                        if (item.isRead) {
-                            modalBody.append('<div class="card mb-2"><div class="card-body"><h5 class="card-title">' + item.subject + '</h5><p class="card-text">' + item.message + '</p></div></div>');
-                        }else{
-                            modalBody.append('<div class="card mb-2"><div class="card-body"><h5 class="card-title"><strong>' + item.subject + '</strong></h5><p class="card-text"><i>' + item.message + '</i></p></div></div>');
-                        }
-                        
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-            });
-
-            }
-
-
-    </script>
     @await RenderSectionAsync("Scripts", required: false)
+    
 </body>
 </html>

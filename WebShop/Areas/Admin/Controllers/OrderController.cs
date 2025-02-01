@@ -156,7 +156,9 @@ namespace WebShop.Areas.Admin.Controllers
                     Subject = usersMessageViewModel.Subject,
                     Message = usersMessageViewModel.Message,
                     IsRead = false,
-                    User = _unitOfWork.ApplicationUser.Get(x=>x.Id==usersMessageViewModel.UserId)
+                    User = _unitOfWork.ApplicationUser.Get(x=>x.Id==usersMessageViewModel.UserId),
+                    CreateDate = DateOnly.FromDateTime(DateTime.Now),
+                    CreateTime = TimeOnly.FromDateTime(DateTime.Now)
                 };
 
                 _unitOfWork.UsersMessage.Add(usersMessage);
