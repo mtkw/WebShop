@@ -30,25 +30,25 @@ function getAllMessagesForUser(userId) {
                 var collapseId = 'collapseElement' + index;
                 modalBody.append(
                     `
-                    <p class="d-flex gap-1">
-                      <a class="btn btn-primary" data-bs-toggle="collapse" href="#${collapseId}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        ${item.subject}
-                      </a>
-                    </p>
-                    <div class="collapse" id="${collapseId}">
-                      <div class="card card-body">
-                        ${item.message}
-                      </div>
-                    </div>
+                        <div class="message-container">
+                            <div class="message-item mb-3">
+                                <p class="d-flex gap-1">
+                                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#${collapseId}" role="button" aria-expanded="false" aria-controls="collapseExample1">
+                                        ${item.subject}
+                                    </a>
+                                </p>
+                                <div class="collapse" id="${collapseId}">
+                                    <div class="card card-body">
+                                        <p><strong>Message:</strong>${item.message}</p>
+                                        <p><strong>Created On:</strong> <span class="text-muted">${item.createDate}</span> at <span class="text-muted">${item.createTime}</span></p>
+                                        <p><strong>Status:</strong> <span class="badge ${item.isRead == 0 ? 'bg-danger' : 'bg-success'}">${item.isRead == 0 ? 'Unread' : 'Read'}</span></p>
+                                        <button class="btn btn-success" onclick="markAsRead(1)">Confirm as Read</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     `
                 )
-
-/*                if (item.isRead) {
-                    modalBody.append('<div class="card mb-2"><div class="card-body"><h5 class="card-title">' + item.subject + '</h5><p class="card-text">' + item.message + '</p></div></div>');
-                } else {
-                    modalBody.append('<div class="card mb-2"><div class="card-body"><h5 class="card-title"><strong>' + item.subject + '</strong></h5><p class="card-text"><i>' + item.message + '</i></p></div></div>');
-                }*/
-
             });
         },
         error: function (xhr, status, error) {
