@@ -12,5 +12,7 @@
         IOrderHeaderRepository OrderHeader { get; }
         IUsersMessageRepository UsersMessage { get; }
         void Save();
+
+        Task SaveAsync();
     }
 }
