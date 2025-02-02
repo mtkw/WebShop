@@ -21,13 +21,12 @@
                 <a class="nav-link" id="cart-icon" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
                     <div class="position-relative">
                         <i class="bi bi-cart"></i>
-                        <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
                             @if(!CartItemCounter.ToString().Equals("0"))
                             {
+                            <div class="cart-counter position-absolute top-100 start-0 translate-middle badge rounded-pill bg-opacity-75">
                                 @CartItemCounter
+                            </div>
                             }
-
-                        </div>
                     </div>
                 </a>
             </li>
@@ -37,14 +36,11 @@
                         @if (MessageCounter.ToString().Equals("0"))
                         {
                             <i class="bi bi-chat-left-dots"></i>
-                            <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
-
-                            </div>
                         }
                         else
                         {
                             <i class="bi bi-chat-left-dots-fill"></i>
-                            <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
+                            <div class="message-counter position-absolute top-100 start-0 translate-middle badge rounded-pill bg-opacity-75">
                                 @MessageCounter
                             </div>
                         }
