@@ -8,6 +8,7 @@
 
 @{
     var CartItemCounter = Context.Items["CartItemCounter"];
+    var MessageCounter = Context.Items["MessageCounter"];
     
 }
 
@@ -20,17 +21,55 @@
                 <a class="nav-link" id="cart-icon" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
                     <div class="position-relative">
                         <i class="bi bi-cart"></i>
-                        <div class="cart-counter position-absolute top-100 start-100 translate-middle badge rounded-pill bg-opacity-75">
                             @if(!CartItemCounter.ToString().Equals("0"))
                             {
+                            <div class="cart-counter position-absolute top-100 start-0 translate-middle badge rounded-pill bg-opacity-75">
                                 @CartItemCounter
+                            </div>
                             }
-
-                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item" id="message-icon">
+                <a class="nav-link" data-bs-toggle="modal" data-bs-target="#messageModal" id="messageIconAnchor" data-userEmail="@User.Claims.FirstOrDefault().Value">
+                    <div class="position-relative">
+                        @if (MessageCounter.ToString().Equals("0"))
+                        {
+                            <i class="bi bi-chat-left-dots"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-chat-left-dots-fill"></i>
+                            <div class="message-counter position-absolute top-100 start-0 translate-middle badge rounded-pill bg-opacity-75">
+                                @MessageCounter
+                            </div>
+                        }
+                        
                     </div>
                 </a>
             </li>
         }
+
+        //----------------------------------------Message Modal----------------------------------------
+        <!-- Modal -->
+        <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true" data-save="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="messageModalLabel">User Messages</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        //----------------------------------------END Message Modal----------------------------------------
 
     <li class="nav-item">
         <a id="manage" class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
@@ -126,5 +165,10 @@ else
 }
 </ul>
 @section Scripts {
+    
+
+
      <partial name="_ValidationScriptsPartial" /> 
+
+     
 }

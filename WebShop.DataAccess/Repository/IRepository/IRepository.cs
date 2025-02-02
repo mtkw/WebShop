@@ -13,6 +13,7 @@ namespace WebShop.DataAccess.Repository.IRepository
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includProperties = null); 
 
         public T Get(Expression<Func<T, bool>> filter, string? includProperties = null);
+        public Task<T> GetAsync(Expression<Func<T, bool>> filter, string? includProperties = null);
 
     }
 }

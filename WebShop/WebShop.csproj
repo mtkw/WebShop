@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebShop.DataAccess\WebShop.DataAccess.csproj" />
-    <ProjectReference Include="..\WebShop.Models\WebShop.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +45,10 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Update="Areas\Customer\Views\_ViewStart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\js\main.js">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

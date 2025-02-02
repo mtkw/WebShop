@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebShop.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using WebShop.DataAccess.Data;
 namespace WebShop.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250128210055_UsersMessageTable")]
+    partial class UsersMessageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -658,12 +661,6 @@ namespace WebShop.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("CreateDate")
-                        .HasColumnType("date");
-
-                    b.Property<TimeOnly>("CreateTime")
-                        .HasColumnType("time");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -692,9 +689,7 @@ namespace WebShop.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ba2591e1-245f-42c0-961e-6c66c9e1a335"),
-                            CreateDate = new DateOnly(1, 1, 1),
-                            CreateTime = new TimeOnly(0, 0, 0),
+                            Id = new Guid("737f0c25-043a-4c5d-8cc8-6dea3826c8f6"),
                             Email = "mati.kaweczynski@gmail.com",
                             IsRead = false,
                             Message = "Message Body",

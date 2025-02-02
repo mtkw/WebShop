@@ -1,0 +1,55 @@
+﻿@using WebShop.Models.Models.Views
+@model  UsersMessageViewModel
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-save="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Message Form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <section>
+                    <form enctype="multipart/form-data" id="account" method="post" asp-area="Admin" asp-controller="Order" asp-action="SendMessageToUser">
+                        <h2>Send Message to User</h2>
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" class="form-control" autocomplete="@Model.User.Email" aria-required="true" placeholder="name@example.com" value="@Model.User.Email" />
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <div>@Html.ValidationMessageFor(m => m.Email)</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Subject" class="form-control" autocomplete="Message Subject" aria-required="true" />
+                            <label asp-for="Subject" class="form-label">Subject</label>
+                            <span asp-validation-for="Subject" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" asp-for="Message" class="form-control" autocomplete="Message Body" aria-required="true" />
+                            <label asp-for="Message" class="form-label">Message</label>
+                            @* @Html.TextAreaFor(m => m.UsersMessage.Message, new { @class = "form-control", rows = 5, cols = 40 }) *@
+                            @* <span asp-validation-for="UsersMessage.Message" class="text-danger"></span> *@
+                        </div>
+                        @* @Html.HiddenFor(m => m.UsersMessage.IsRead, false) *@
+                        @* @Html.HiddenFor(m => m.UsersMessage.UserId, @Model.User.Id)
+                        @Html.HiddenFor(m => m.User, @Model.User) *@
+                        <input type="hidden" asp-for="UserId" class="form-control" autocomplete="Message Body" aria-required="true" value="@Model.UserId" />
+                        <input type="hidden" asp-for="OrderId" class="form-control" autocomplete="Message Body" aria-required="true" value="@Model.OrderId" />
+@*                         <input type="hidden" asp-for="User" class="form-control" autocomplete="Message Body" aria-required="true" value="@Model.User" /> *@
+                        <div>
+                            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* End Modal Section ---------------------------------------------------------------------------------------------------------------------- *@
