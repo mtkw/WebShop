@@ -1,31 +1,49 @@
 ﻿
 
-document.getElementById("messageIconAnchor").addEventListener("click", test);
+document.getElementById("messageIconAnchor").addEventListener("click", getMessages);
 
-function test() {
+
+function getMessages() {
     const element = document.getElementById("messageIconAnchor");
     const att = element.getAttribute("data-userEmail");
-    getAllMessagesForUser(att);
+    getUsersMessages(att, handleMessages);
 }
 
-function getAllMessagesForUser(userId) {
-    var url = "/Customer/Message/GetAllMessageForUser";
 
+
+function getUsersMessages(userId, callback) {
+    var url = "/Customer/Message/GetAllMessageForUser";
     var data = { userId: userId };
 
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: data,
-        contentType: 'application/json',
-        DataTransfer: 'json',
-        success: function (data) {
-            var modalBody = $('#messageModal .modal-body');
-            modalBody.html('');
-            $.each(data, function (index, item) {
-                var collapseId = 'collapseElement' + index;
-                modalBody.append(
-                    `
+    const queryString = new URLSearchParams(data).toString();
+
+    fetch(`${url}?${queryString}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            callback(data);
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
+function handleMessages(data) {
+    var modalBody = $('#messageModal .modal-body');
+    modalBody.html('');
+    data.forEach(function (item, index) {
+        var collapseId = 'collapseElement' + index;
+        modalBody.append(
+            `
                         <div class="message-container">
                             <div class="message-item mt-1">
                                 <p class="m-0">
@@ -45,14 +63,9 @@ function getAllMessagesForUser(userId) {
                             </div>
                         </div>
                     `
-                )
-            });
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-        }
-    });
+        )
 
+    })
 }
 
 function read(messageId) {
